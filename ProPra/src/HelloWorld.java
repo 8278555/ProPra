@@ -5,6 +5,7 @@ public class HelloWorld {
 		System.out.println("Hello World!");
 		System.out.println("Hallo? Jemand dahaaa?");
 		System.out.println("Also ehrlich...");
+		System.out.println("Jetzt aber!");
 	}
 
 }
