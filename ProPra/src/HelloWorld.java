@@ -7,6 +7,7 @@ public class HelloWorld {
 		System.out.println("Also ehrlich...");
 		System.out.println("Jetzt aber!");
 		System.out.println("Weiter gehts...");
+		System.out.println("Jetzt was online eingetragen");
 	}
 
 }
