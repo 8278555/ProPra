@@ -19,7 +19,7 @@ public class MyPNMLParser extends PNMLParser{
         if (args.length >= 0) {
             File pnmlDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Beispiel-01.pnml");
             if (pnmlDatei.exists()) {
-                PNMLParser pnmlParser = new PNMLParser(pnmlDatei);
+                PNMLParser pnmlParser = new MyPNMLParser(pnmlDatei);
                 pnmlParser.initParser();
                 pnmlParser.parse();
             } else {
@@ -70,10 +70,13 @@ public class MyPNMLParser extends PNMLParser{
      *      Java {@link File} Objekt der PNML Datei
      */
 
+    private WFEModelNet netz;
 	
 	public MyPNMLParser(final File pnml) {
 		super(pnml);
+		WFEModelNet netz = new WFEModelNet("Testname");
 		this.pnmlDatei = pnml;
+		
 	}
 
 
@@ -92,7 +95,11 @@ public class MyPNMLParser extends PNMLParser{
      *      Identifikationstext der Transition
      */
     public void newTransition(final String id) {
-        System.out.println("Transition mit id " + id + " wurde gefunden.");
+        //netz.addTransition(id);
+    	IPetriNamedElements id1 = new WFEModelTransition();
+        id1.SetID(id);
+    	System.out.println("Transition mit id " + id1 + " wurde gefunden.");
+    	System.out.println(id1.toString());
     }
 
     /**
@@ -102,8 +109,10 @@ public class MyPNMLParser extends PNMLParser{
      *      Identifikationstext der Stelle
      */
     public void newPlace(final String id) {
+        IPetriNamedElements stelle = new WFEModelPlace();
+        stelle.SetID(id);
         System.out.println("Stelle mit id " + id + " wurde gefunden.");
-        Stelle stelle = new Stelle(id);
+        System.out.println(stelle.toString());
     }
 
     /**
@@ -117,8 +126,13 @@ public class MyPNMLParser extends PNMLParser{
      *      Identifikationstext des Endelements der Kante     
      */
     public void newArc(final String id, final String source, final String target) {
-        System.out.println("Kante mit id " + id + " von " + source + " nach "
+        IArc kante = new WFEModelArc();
+        kante.SetID(id);
+        kante.SetSource(source);
+        kante.SetTarget(target);
+    	System.out.println("Kante mit id " + id + " von " + source + " nach "
                 + target + " wurde gefunden.");
+    	System.out.println(kante.toString());
     }
 
     /**

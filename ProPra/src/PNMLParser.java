@@ -27,8 +27,8 @@ public class PNMLParser {
      *      Die Konsolen Parameter, mit denen das Programm aufgerufen wird.
      */
     public static void main(final String[] args) {
-        if (args.length > 0) {
-            File pnmlDatei = new File(args[0]);
+        if (args.length >= 0) {
+            File pnmlDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Beispiel-01.pnml");
             if (pnmlDatei.exists()) {
                 PNMLParser pnmlParser = new PNMLParser(pnmlDatei);
                 pnmlParser.initParser();
