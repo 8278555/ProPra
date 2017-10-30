@@ -1,0 +1,20 @@
+/**
+ * 
+ */
+
+/**
+ * @author Daniel Brenner
+ *
+ */
+public interface IPlace {
+	public void SetID(String id);
+	String GetID();
+	public void SetName(String name);
+	String GetName();
+	public void SetToken(int token);
+	int GetToken();
+	public void SetPositionx(int x);
+	int GetPositionx();
+	public void SetPositiony(int y);
+	int GetPositiony();
+}
