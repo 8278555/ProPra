@@ -56,7 +56,6 @@ public class WFEModelNet {
 			if (id == (petriElements.get(i).GetID())) {
 				IPlace placesetter = (IPlace) petriElements.get(i);
 				placesetter.SetToken(Integer.parseInt(marking));
-				System.out.println(marking);
 			}
 		}
 	}
