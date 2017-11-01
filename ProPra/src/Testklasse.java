@@ -4,8 +4,8 @@ public class Testklasse {
 
     public static void main(final String[] args) {
     	    if (args.length >= 0) {
-            File pnmlDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Beispiel-01.pnml");
-            //File pnmlDatei = new File("C:\\Users\\daniel.brenner\\Documents\\Uni\\2017_2018_ws_aufgabenstellung\\Beispiele\\Beispiel-03.pnml");
+            //File pnmlDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Beispiel-01.pnml");
+            File pnmlDatei = new File("C:\\Users\\daniel.brenner\\Documents\\Uni\\2017_2018_ws_aufgabenstellung\\Beispiele\\Beispiel-03.pnml");
             if (pnmlDatei.exists()) {
             	final WFEModelNet petrinetz = new WFEModelNet("Testname");
                 PNMLParser pnmlParser = new MyPNMLParser(pnmlDatei, petrinetz);
@@ -15,7 +15,6 @@ public class Testklasse {
             		IPetriElements test = petrinetz.petriElements.get(i);
             		System.out.println(test.toString());
             	}
-            	System.out.println("Git-Tests");
             } 
             else {
                 System.err.println("Die Datei " + pnmlDatei.getAbsolutePath()
