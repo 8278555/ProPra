@@ -1,5 +1,5 @@
 import java.io.File;
-import java.io.FileInputStream;
+/**import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Iterator;
@@ -12,24 +12,10 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-
+*/
 public class MyPNMLParser extends PNMLParser{
 
-    public static void main(final String[] args) {
-        if (args.length >= 0) {
-            File pnmlDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Beispiel-01.pnml");
-            if (pnmlDatei.exists()) {
-                PNMLParser pnmlParser = new MyPNMLParser(pnmlDatei);
-                pnmlParser.initParser();
-                pnmlParser.parse();
-            } else {
-                System.err.println("Die Datei " + pnmlDatei.getAbsolutePath()
-                        + " wurde nicht gefunden!");
-            }
-        } else {
-            System.out.println("Bitte eine Datei als Parameter angeben!");
-        }
-    }
+
 
     /**
      * Dies ist eine Referenz zum Java Datei Objekt.
@@ -40,28 +26,30 @@ public class MyPNMLParser extends PNMLParser{
      * Dies ist eine Referenz zum XML Parser. Diese Referenz wird durch die
      * Methode parse() initialisiert.
      */
-    private XMLEventReader xmlParser = null;
+    //private XMLEventReader xmlParser = null;
 
     /**
      * Diese Variable dient als Zwischenspeicher für die ID des zuletzt gefundenen Elements.
      */
-    private String         lastId    = null;
+    //private String         lastId    = null;
 
     /**
      * Dieses Flag zeigt an, ob der Parser gerade innerhalb eines Token Elements liest.
      */
-    private boolean        isToken   = false;
+    //private boolean        isToken   = false;
 
     /**
      * Dieses Flag zeigt an, ob der Parser gerade innerhalb eines Name Elements liest.
      */
-    private boolean        isName    = false;
+    //private boolean        isName    = false;
 
     /**
      * Dieses Flag zeigt an, ob der Parser gerade innerhalb eines Value Elements liest.
      */
-    private boolean        isValue   = false;
+    //private boolean        isValue   = false;
 
+    WFEModelNet petrinetz;
+    
     /**
      * Dieser Konstruktor erstellt einen neuen Parser für PNML Dateien,
      * dem die PNML Datei als Java {@link File} übergeben wird.
@@ -70,20 +58,12 @@ public class MyPNMLParser extends PNMLParser{
      *      Java {@link File} Objekt der PNML Datei
      */
 
-    private WFEModelNet netz;
 	
-	public MyPNMLParser(final File pnml) {
+	public MyPNMLParser(final File pnml, WFEModelNet petrinetz) {
 		super(pnml);
-		WFEModelNet netz = new WFEModelNet("Testname");
 		this.pnmlDatei = pnml;
-		
+		this.petrinetz = petrinetz;
 	}
-
-
-
-
-
-
 
 
 
@@ -95,11 +75,9 @@ public class MyPNMLParser extends PNMLParser{
      *      Identifikationstext der Transition
      */
     public void newTransition(final String id) {
-        //netz.addTransition(id);
-    	IPetriNamedElements id1 = new WFEModelTransition();
-        id1.SetID(id);
-    	System.out.println("Transition mit id " + id1 + " wurde gefunden.");
-    	System.out.println(id1.toString());
+        petrinetz.addTransition(id);
+    	System.out.println("Transition mit id " + id + " wurde gefunden.");
+
     }
 
     /**
@@ -109,10 +87,8 @@ public class MyPNMLParser extends PNMLParser{
      *      Identifikationstext der Stelle
      */
     public void newPlace(final String id) {
-        IPetriNamedElements stelle = new WFEModelPlace();
-        stelle.SetID(id);
+        petrinetz.addPlace(id);
         System.out.println("Stelle mit id " + id + " wurde gefunden.");
-        System.out.println(stelle.toString());
     }
 
     /**
@@ -126,13 +102,9 @@ public class MyPNMLParser extends PNMLParser{
      *      Identifikationstext des Endelements der Kante     
      */
     public void newArc(final String id, final String source, final String target) {
-        IArc kante = new WFEModelArc();
-        kante.SetID(id);
-        kante.SetSource(source);
-        kante.SetTarget(target);
+        petrinetz.addArc(id, source, target);
     	System.out.println("Kante mit id " + id + " von " + source + " nach "
                 + target + " wurde gefunden.");
-    	System.out.println(kante.toString());
     }
 
     /**
@@ -147,7 +119,8 @@ public class MyPNMLParser extends PNMLParser{
      *      y Position des Elements
      */
     public void setPosition(final String id, final String x, final String y) {
-        System.out.println("Setze die Position des Elements " + id + " auf ("
+        petrinetz.setPosition(id, x, y);
+    	System.out.println("Setze die Position des Elements " + id + " auf ("
                 + x + ", " + y + ")");
     }
 
@@ -161,6 +134,7 @@ public class MyPNMLParser extends PNMLParser{
      *      Beschriftungstext des Elements
      */
     public void setName(final String id, final String name) {
+    	petrinetz.setName(id, name);
         System.out.println("Setze den Namen des Elements " + id + " auf "
                 + name);
     }
@@ -175,6 +149,7 @@ public class MyPNMLParser extends PNMLParser{
      *      Markierung des Elements
      */
     public void setMarking(final String id, final String marking) {
+    	petrinetz.setMarking(id, marking);
         System.out.println("Setze die Markierung des Elements " + id + " auf "
                 + marking);
     }

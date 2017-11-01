@@ -1,40 +1,63 @@
+import java.util.ArrayList;
 
 public class WFEModelNet {
-	WFEModelArc[] kanten;
-	WFEModelTransition[] transitionen;
-	WFEModelPlace[] stellen;
+	WFEModelArc kante;
+	WFEModelTransition transition;
+	WFEModelPlace stelle;
+	ArrayList<IPetriElements> petriElements;
 	String filename;
 	int i;
 	String id;
 	WFEModelNet(String filename) {
 		this.filename=filename;
+		petriElements = new ArrayList<IPetriElements>();
 	}
 	
 	public void addTransition(String id) {
-		//TBD
-		//Wenn array nicht da, erstellen Größe 1, id eintragen
-		//Wenn array da, prüfen ob keine leere stelle vorhanden, dann vergrößern
-		//In erste freie stelle ID eintragen
-		this.id = id;
-		transitionen = new WFEModelTransition[15];
-
-				//transitionen[1].id=id;
-				transitionen[0].SetID(id);;
-				System.out.println(kanten[i].id);
-				System.out.println("Hello World");
-			}
+		transition = new WFEModelTransition();
+		transition.SetID(id);
+		petriElements.add(transition);
+		}
 		
 	
 	public void addPlace(String id) {
-		//TBD
-		//Wenn array nicht da, erstellen Größe 1, id eintragen
-		//Wenn array da, prüfen ob keine leere stelle vorhanden, dann vergrößern
-		//In erste freie stelle ID eintragen
+		stelle = new WFEModelPlace();
+		stelle.SetID(id);
+		petriElements.add(stelle);
 	}
-	public void addArc(String id) {
-		//TBD
-		//Wenn array nicht da, erstellen Größe 1, id eintragen
-		//Wenn array da, prüfen ob keine leere stelle vorhanden, dann vergrößern
-		//In erste freie stelle ID eintragen
+	public void addArc(String id, String source, String target) {
+		kante = new WFEModelArc();
+		kante.SetID(id);
+		kante.SetSource(source);
+		kante.SetTarget(target);
+		petriElements.add(kante);
+	}
+	public void setPosition(String id, String x, String y) {
+		for (i=0; i<(petriElements.size()); i++) {
+			if (id == (petriElements.get(i).GetID())) {
+				IPetriNamedElements possetter = (IPetriNamedElements) petriElements.get(i);
+				possetter.SetPositionx(Integer.parseInt(x));
+				possetter.SetPositiony(Integer.parseInt(y));
+			}
+		}		
+	}
+	public void setName(String id, String name) {
+		for (i=0; i<(petriElements.size()); i++) {
+			if (id == (petriElements.get(i).GetID())) {
+				IPetriNamedElements namesetter = (IPetriNamedElements) petriElements.get(i);
+				namesetter.SetName(name);		
+			}
+		}		
+	}
+	
+	public void setMarking(String id, String marking) {
+		//ToDo
+		for (i=0; i<(petriElements.size()); i++) {
+			if (id == (petriElements.get(i).GetID())) {
+				IPlace placesetter = (IPlace) petriElements.get(i);
+				placesetter.SetToken(Integer.parseInt(marking));
+				System.out.println(marking);
+			}
+		}
 	}
 }
