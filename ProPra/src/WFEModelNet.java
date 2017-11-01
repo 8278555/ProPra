@@ -13,6 +13,10 @@ public class WFEModelNet {
 		petriElements = new ArrayList<IPetriElements>();
 	}
 	
+	public int getListSize() {
+		return petriElements.size();
+	}
+		
 	public void addTransition(String id) {
 		transition = new WFEModelTransition();
 		transition.SetID(id);
