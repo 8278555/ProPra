@@ -39,7 +39,8 @@ public class WFEModelArc implements IArc {
 		// TODO Auto-generated method stub
 		return target;
 	}
-	public String toString() {
+	@Override
+    public String toString() {
 		return ("Das ist die Kante " + id + " mit der Quelle:" + source + " und dem Ziel:" + target);
 	}
 

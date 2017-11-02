@@ -1,11 +1,18 @@
 
 public class WFEModelPlace implements IPlace {
 	String id;
-	String name;
-	int token;
-	int positionx;
-	int positiony;
+	WFEModelName name;
+	WFEModelInitialMarking initialmarking;
+	WFEModelGraphics graphics;
 	
+	public WFEModelPlace(String id) {
+	    this.id = id;
+	    name = new WFEModelName();
+	    initialmarking = new WFEModelInitialMarking();
+	    graphics = new WFEModelGraphics();
+	}
+	
+	@Override
 	public void SetID(String id) {
 		this.id=id;
 
@@ -19,53 +26,37 @@ public class WFEModelPlace implements IPlace {
 
 	@Override
 	public void SetName(String name) {
-		this.name=name;
-
+		this.name.setname(name);
 	}
 
 	@Override
 	public String GetName() {
+		return this.name.getname();
+	}
+
+    public void SetToken(String token) {
+		this.initialmarking.settoken(token);
+	}
+
+	@Override
+	public String GetToken() {		
+		return this.initialmarking.gettoken();
+	}
+
+	@Override
+	public void SetPosition(int x, int y) {
 		// TODO Auto-generated method stub
-		return name;
+		this.graphics.SetPosition(x, y);;
 	}
 
 	@Override
-	public void SetToken(int token) {
-		this.token=token;
-
-	}
-
-	@Override
-	public int GetToken() {
-		
-		return token;
-	}
-
-	@Override
-	public void SetPositionx(int x) {
+	public int GetPosition() {
 		// TODO Auto-generated method stub
-		this.positionx=x;
+		return this.graphics.GetPosition();
 	}
 
-	@Override
-	public int GetPositionx() {
-		// TODO Auto-generated method stub
-		return positionx;
-	}
-
-	@Override
-	public void SetPositiony(int y) {
-		// TODO Auto-generated method stub
-		this.positiony=y;
-	}
-
-	@Override
-	public int GetPositiony() {
-		// TODO Auto-generated method stub
-		return positiony;
-	}
-	public String toString() {
-		return ("Das ist die Stelle " + name + " mit der id " + id + ", dem Token " + token + " und der Position x:" + positionx + " y:" + positiony);
-	}
+//	public String toString() {
+//		return ("Das ist die Stelle " + name + " mit der id " + id + ", dem Token " + token + " und der Position x:" + positionx + " y:" + positiony);
+//	}
 
 }

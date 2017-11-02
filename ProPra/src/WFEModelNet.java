@@ -7,9 +7,8 @@ public class WFEModelNet {
 	ArrayList<IPetriElements> petriElements;
 	String filename;
 	int i;
-	String id;
+	//String id;
 	WFEModelNet(String filename) {
-		this.filename=filename;
 		petriElements = new ArrayList<IPetriElements>();
 	}
 	
@@ -25,8 +24,7 @@ public class WFEModelNet {
 		
 	
 	public void addPlace(String id) {
-		stelle = new WFEModelPlace();
-		stelle.SetID(id);
+		stelle = new WFEModelPlace(id);
 		petriElements.add(stelle);
 	}
 	public void addArc(String id, String source, String target) {
@@ -59,7 +57,7 @@ public class WFEModelNet {
 		for (i=0; i<(petriElements.size()); i++) {
 			if (id == (petriElements.get(i).GetID())) {
 				IPlace placesetter = (IPlace) petriElements.get(i);
-				placesetter.SetToken(Integer.parseInt(marking));
+				placesetter.SetToken(marking);
 			}
 		}
 	}

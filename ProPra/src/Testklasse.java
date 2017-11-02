@@ -4,7 +4,9 @@ public class Testklasse {
 
     public static void main(final String[] args) {
         if (args.length >= 0) {
-            File pnmlOutDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Eigene/Beispiel-02.pnml");
+            //ToDo Try-Catch wegen File/Path not found
+            //File pnmlOutDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Eigene/Beispiel-02.pnml");
+            File pnmlOutDatei = new File("C:\\Users\\daniel.brenner\\Documents\\Uni\\2017_2018_ws_aufgabenstellung\\Beispiele\\Eigene\\Beispiel-01.pnml");
             if (pnmlOutDatei.exists() == false) {
             	PNMLWriter pnmlWriter = new PNMLWriter(pnmlOutDatei);
             	final WFEModelNet petrinetz = new WFEModelNet("Testname");

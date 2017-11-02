@@ -7,6 +7,6 @@
  *
  */
 public interface IPlace extends IPetriNamedElements{
-	public void SetToken(int token);
-	int GetToken();
+	public void SetToken(String token);
+	String GetToken();
 }
