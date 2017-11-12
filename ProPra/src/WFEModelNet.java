@@ -17,7 +17,7 @@ public class WFEModelNet {
 	}
 		
 	public void addTransition(String id) {
-		transition = new WFEModelTransition();
+		transition = new WFEModelTransition(id);
 		transition.SetID(id);
 		petriElements.add(transition);
 		}
@@ -38,8 +38,7 @@ public class WFEModelNet {
 		for (i=0; i<(petriElements.size()); i++) {
 			if (id == (petriElements.get(i).GetID())) {
 				IPetriNamedElements possetter = (IPetriNamedElements) petriElements.get(i);
-				possetter.SetPositionx(Integer.parseInt(x));
-				possetter.SetPositiony(Integer.parseInt(y));
+				possetter.SetPosition(Integer.parseInt(x),Integer.parseInt(y));
 			}
 		}		
 	}

@@ -1,10 +1,15 @@
 
 public class WFEModelTransition implements IPetriNamedElements {
 	public String id;
-	String name;
-	int positionx;
-	int positiony;
+	WFEModelName name;
+	WFEModelGraphics graphics;
 
+	public WFEModelTransition(String id){
+		this.id=id;
+		name = new WFEModelName();
+		graphics = new WFEModelGraphics();
+	}
+	
 	public void SetID(String id) {
 		this.id=id;
 
@@ -18,41 +23,30 @@ public class WFEModelTransition implements IPetriNamedElements {
 
 	@Override
 	public void SetName(String name) {
-		this.name=name;
-
+		this.name.setname(name);
 	}
 
 	@Override
 	public String GetName() {
 		// TODO Auto-generated method stub
-		return name;
+		return this.GetName();
 	}
 
 	@Override
-	public void SetPositionx(int x) {
+	public void SetPosition(int x, int y) {
 		// TODO Auto-generated method stub
-		this.positionx=x;
+		this.graphics.SetPosition(x, y);
 	}
 
 	@Override
-	public int GetPositionx() {
+	public IPetriPosition GetPosition() {
 		// TODO Auto-generated method stub
-		return positionx;
+		return this.graphics.GetPosition();
 	}
 
-	@Override
-	public void SetPositiony(int y) {
-		// TODO Auto-generated method stub
-		this.positiony=y;
-	}
 
-	@Override
-	public int GetPositiony() {
-		// TODO Auto-generated method stub
-		return positiony;
-	}
 	
-	public String toString() {
-		return ("Das ist die Transition " + name + " mit der id " + id + " und der Position x:" + positionx + " y:" + positiony);
-	}
+//	public String toString() {
+//		return ("Das ist die Transition " + name + " mit der id " + id + " und der Position x:" + positionx + " y:" + positiony);
+//	}
 }

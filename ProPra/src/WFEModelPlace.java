@@ -50,8 +50,7 @@ public class WFEModelPlace implements IPlace {
 	}
 
 	@Override
-	public int GetPosition() {
-		// TODO Auto-generated method stub
+	public IPetriPosition GetPosition() {
 		return this.graphics.GetPosition();
 	}
 

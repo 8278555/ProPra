@@ -5,8 +5,8 @@ public class Testklasse {
     public static void main(final String[] args) {
         if (args.length >= 0) {
             //ToDo Try-Catch wegen File/Path not found
-            //File pnmlOutDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Eigene/Beispiel-02.pnml");
-            File pnmlOutDatei = new File("C:\\Users\\daniel.brenner\\Documents\\Uni\\2017_2018_ws_aufgabenstellung\\Beispiele\\Eigene\\Beispiel-01.pnml");
+            File pnmlOutDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Eigene/Beispiel-03.pnml");
+            //File pnmlOutDatei = new File("C:\\Users\\daniel.brenner\\Documents\\Uni\\2017_2018_ws_aufgabenstellung\\Beispiele\\Eigene\\Beispiel-01.pnml");
             if (pnmlOutDatei.exists() == false) {
             	PNMLWriter pnmlWriter = new PNMLWriter(pnmlOutDatei);
             	final WFEModelNet petrinetz = new WFEModelNet("Testname");
@@ -34,11 +34,12 @@ public class Testklasse {
             	for (int i = 0; i< petrinetz.getListSize(); i++) {
             		if (petrinetz.petriElements.get(i) instanceof WFEModelTransition) {
             			WFEModelTransition transition = (WFEModelTransition) petrinetz.petriElements.get(i);
-            			pnmlWriter.addTransition(transition.GetID(), transition.GetName(), (Integer.toString(transition.GetPositionx())), (Integer.toString(transition.GetPositiony())));
+            			// pnmlWriter.addTransition(transition.GetID(), transition.GetName(), Integer.toString(transition.graphics.position.x), Integer.toString(transition.graphics.position.y));
+            			pnmlWriter.addTransition(transition.id, transition.name.value.wert, Integer.toString(transition.graphics.position.x), Integer.toString(transition.graphics.position.y));
             		}
             		if (petrinetz.petriElements.get(i) instanceof WFEModelPlace) {
             			WFEModelPlace stelle = (WFEModelPlace) petrinetz.petriElements.get(i);
-            			pnmlWriter.addPlace(stelle.GetID(), stelle.GetName(), (Integer.toString(stelle.GetPositionx())), (Integer.toString(stelle.GetPositiony())), Integer.toString(stelle.GetToken()));
+            			pnmlWriter.addPlace(stelle.GetID(), stelle.GetName(), Integer.toString(stelle.graphics.position.x), Integer.toString(stelle.graphics.position.y), stelle.GetToken());
             		}
             		if (petrinetz.petriElements.get(i) instanceof WFEModelArc) {
             			WFEModelArc kante = (WFEModelArc) petrinetz.petriElements.get(i);

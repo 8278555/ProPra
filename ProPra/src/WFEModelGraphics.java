@@ -5,10 +5,9 @@ public class WFEModelGraphics {
         position = new WFEModelPosition();
     }
     public void SetPosition(int x, int y) {
-        //ToDo
+        position.setPosition(x, y);
     }
-    public int GetPosition() {
-        return 1;
-        //ToDo
+    public IPetriPosition  GetPosition() {
+        return position.getPosition();
     }
 }
