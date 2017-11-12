@@ -10,4 +10,10 @@ public class WFEModelGraphics {
     public IPetriPosition  GetPosition() {
         return position.getPosition();
     }
+    public int getPositionx() {
+    	return position.getPositionx();
+    }
+    public int getPositiony() {
+    	return position.getPositiony();
+    }
 }

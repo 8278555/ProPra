@@ -31,15 +31,16 @@ public class Testklasse {
             	
             	pnmlWriter.startXMLDocument();
             	
+
+            	
             	for (int i = 0; i< petrinetz.getListSize(); i++) {
             		if (petrinetz.petriElements.get(i) instanceof WFEModelTransition) {
             			WFEModelTransition transition = (WFEModelTransition) petrinetz.petriElements.get(i);
-            			// pnmlWriter.addTransition(transition.GetID(), transition.GetName(), Integer.toString(transition.graphics.position.x), Integer.toString(transition.graphics.position.y));
-            			pnmlWriter.addTransition(transition.id, transition.name.value.wert, Integer.toString(transition.graphics.position.x), Integer.toString(transition.graphics.position.y));
+            			pnmlWriter.addTransition(transition.GetID(), transition.getName(), Integer.toString(transition.getPositionx()), Integer.toString(transition.getPositiony()));
             		}
             		if (petrinetz.petriElements.get(i) instanceof WFEModelPlace) {
             			WFEModelPlace stelle = (WFEModelPlace) petrinetz.petriElements.get(i);
-            			pnmlWriter.addPlace(stelle.GetID(), stelle.GetName(), Integer.toString(stelle.graphics.position.x), Integer.toString(stelle.graphics.position.y), stelle.GetToken());
+            			pnmlWriter.addPlace(stelle.GetID(), stelle.getName(), Integer.toString(stelle.getPositionx()), Integer.toString(stelle.getPositiony()), stelle.GetToken());
             		}
             		if (petrinetz.petriElements.get(i) instanceof WFEModelArc) {
             			WFEModelArc kante = (WFEModelArc) petrinetz.petriElements.get(i);

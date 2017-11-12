@@ -9,6 +9,12 @@ public class WFEModelPosition implements IPetriPosition{
     public IPetriPosition getPosition() {
     	return this;
     }
+    public int getPositionx() {
+    	return x;
+    }
+    public int getPositiony() {
+    	return y;
+    }
     public String toString() {
     	return Integer.toString(x) + Integer.toString(y);
     }

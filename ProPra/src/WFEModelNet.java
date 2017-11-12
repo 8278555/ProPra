@@ -38,7 +38,7 @@ public class WFEModelNet {
 		for (i=0; i<(petriElements.size()); i++) {
 			if (id == (petriElements.get(i).GetID())) {
 				IPetriNamedElements possetter = (IPetriNamedElements) petriElements.get(i);
-				possetter.SetPosition(Integer.parseInt(x),Integer.parseInt(y));
+				possetter.setPosition(Integer.parseInt(x),Integer.parseInt(y));
 			}
 		}		
 	}
@@ -46,7 +46,7 @@ public class WFEModelNet {
 		for (i=0; i<(petriElements.size()); i++) {
 			if (id == (petriElements.get(i).GetID())) {
 				IPetriNamedElements namesetter = (IPetriNamedElements) petriElements.get(i);
-				namesetter.SetName(name);		
+				namesetter.setName(name);		
 			}
 		}		
 	}

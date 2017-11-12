@@ -22,26 +22,32 @@ public class WFEModelTransition implements IPetriNamedElements {
 	}
 
 	@Override
-	public void SetName(String name) {
+	public void setName(String name) {
 		this.name.setname(name);
 	}
 
 	@Override
-	public String GetName() {
+	public String getName() {
 		// TODO Auto-generated method stub
-		return this.GetName();
+		return this.name.getname();
 	}
 
 	@Override
-	public void SetPosition(int x, int y) {
+	public void setPosition(int x, int y) {
 		// TODO Auto-generated method stub
 		this.graphics.SetPosition(x, y);
 	}
 
 	@Override
-	public IPetriPosition GetPosition() {
+	public IPetriPosition getPosition() {
 		// TODO Auto-generated method stub
 		return this.graphics.GetPosition();
+	}
+	public int getPositionx() {
+		return this.graphics.getPositionx();
+	}
+	public int getPositiony() {
+		return this.graphics.getPositiony();
 	}
 
 

@@ -10,6 +10,6 @@ public class WFEModelToken {
         this.value.setvalue(value);
     }
     public String getvalue() {
-        return this.getvalue();
+        return this.value.getvalue();
     }
 }
