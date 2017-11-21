@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
 public class WFEModelNet {
-	WFEModelArc kante;
-	WFEModelTransition transition;
-	WFEModelPlace stelle;
+	IArc kante;
+	IPetriNamedElements transition;
+	IPlace stelle;
 	ArrayList<IPetriElements> petriElements;
 	String filename;
 	int i;

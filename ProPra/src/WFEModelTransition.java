@@ -12,7 +12,6 @@ public class WFEModelTransition implements IPetriNamedElements {
 	
 	public void SetID(String id) {
 		this.id=id;
-
 	}
 
 	@Override

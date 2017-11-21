@@ -1,6 +1,6 @@
 
 public class WFEModelGraphics {
-    WFEModelPosition position;
+    IPetriPosition position;
     public WFEModelGraphics() {
         position = new WFEModelPosition();
     }
