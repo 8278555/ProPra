@@ -1,3 +1,4 @@
+package Release;
 
 public interface IArc extends IPetriElements{
 	public void SetSource(String source);

@@ -1,3 +1,4 @@
+package Release;
 
 public class WFEModelPosition implements IPetriPosition{
     int x;

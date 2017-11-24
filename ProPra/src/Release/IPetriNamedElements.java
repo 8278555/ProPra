@@ -1,3 +1,4 @@
+package Release;
 
 public interface IPetriNamedElements extends IPetriElements {
 	public void setName(String name);

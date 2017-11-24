@@ -1,4 +1,11 @@
+package Testobjekte;
 import java.io.File;
+
+import Release.PNMLWriter;
+import Release.WFEModelArc;
+import Release.WFEModelNet;
+import Release.WFEModelPlace;
+import Release.WFEModelTransition;
 
 public class Testklasse {
 

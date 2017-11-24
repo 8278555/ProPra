@@ -1,3 +1,4 @@
+package Release;
 
 public class WFEModelInitialMarking {
     WFEModelToken token;

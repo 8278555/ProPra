@@ -1,3 +1,4 @@
+package Release;
 
 public class WFEModelArc implements IArc {
 	String id;

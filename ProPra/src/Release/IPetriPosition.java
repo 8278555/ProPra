@@ -1,3 +1,4 @@
+package Release;
 
 public interface IPetriPosition {
 	public void setPosition (int x, int y);

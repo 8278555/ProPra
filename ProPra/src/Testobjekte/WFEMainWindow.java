@@ -1,18 +1,28 @@
+package Testobjekte;
+import java.awt.BorderLayout;
 
+import javax.swing.*;
 
-public class WFEMainWindow extends javax.swing.JFrame {
+public class WFEMainWindow extends JFrame {
 
     public WFEMainWindow() {
         initComponents();
+        BorderLayout layout = new BorderLayout();
         this.setTitle("Fenstertext");
+        this.setLayout(layout);
+        WFEPanel panel = new WFEPanel();
+        this.add(panel);
     }
+    
+    
 
     private void initComponents() {
 
-        jScrollBar2 = new javax.swing.JScrollBar();
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+    	jScrollBar1 = new javax.swing.JScrollBar();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jScrollBar1 = new javax.swing.JScrollBar();
-        jScrollBar3 = new javax.swing.JScrollBar();
+        jScrollBar2 = new javax.swing.JScrollBar();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -29,9 +39,9 @@ public class WFEMainWindow extends javax.swing.JFrame {
 
         jMenuItem1.setText("jMenuItem1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jScrollBar3.setOrientation(javax.swing.JScrollBar.HORIZONTAL);
+        jScrollBar2.setOrientation(javax.swing.JScrollBar.HORIZONTAL);
+        jScrollBar1.setOrientation(javax.swing.JScrollBar.VERTICAL);
 
         jMenu1.setText("Datei");
 
@@ -109,9 +119,9 @@ public class WFEMainWindow extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jScrollBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE)
+                .addComponent(jScrollBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,7 +130,7 @@ public class WFEMainWindow extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(141, 419, Short.MAX_VALUE)
-                .addComponent(jScrollBar3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();

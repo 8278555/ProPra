@@ -1,14 +1,15 @@
+package Release;
 import java.util.ArrayList;
 
-public class WFEModelNet {
+public class WFEModelNet implements IWFEModelNet{
 	IArc kante;
 	IPetriNamedElements transition;
 	IPlace stelle;
-	ArrayList<IPetriElements> petriElements;
+	public ArrayList<IPetriElements> petriElements;
 	String filename;
 	int i;
 	//String id;
-	WFEModelNet(String filename) {
+	public WFEModelNet(String filename) {
 		petriElements = new ArrayList<IPetriElements>();
 	}
 	
