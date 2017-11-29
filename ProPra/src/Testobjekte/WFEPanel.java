@@ -10,7 +10,11 @@ import Release.*;
 
 
 public class WFEPanel extends JPanel {
-	
+
+    private IPetriNamedElements sourcepoint;
+    private IPetriNamedElements destpoint;
+
+    
 	public WFEPanel() {
 		// TODO Auto-generated constructor stub
 	}
@@ -37,6 +41,7 @@ public class WFEPanel extends JPanel {
 	
 	private WFEModelNet petrinetz;
 	
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
@@ -63,7 +68,23 @@ public class WFEPanel extends JPanel {
     }
     
     protected void drawArc(Graphics2D g) {
-    	g.drawArc(30, 30, 100, 100, 0, 0);
+        for (int i = 0; i< petrinetz.getListSize(); i++) {
+            if (petrinetz.petriElements.get(i) instanceof WFEModelArc) {
+                WFEModelArc kante = (WFEModelArc) petrinetz.petriElements.get(i);
+                for (int j = 0; j< petrinetz.getListSize(); j++) {
+                    IPetriElements currElem = petrinetz.petriElements.get(j);
+                    if (currElem.GetID().equals(kante.GetSource())) {
+                        sourcepoint = (IPetriNamedElements) currElem;
+                    }
+                    else {
+                        if (currElem.GetID().equals(kante.GetTarget())) {
+                            destpoint = (IPetriNamedElements) currElem;
+                        }
+                    }
+                }
+                g.drawLine((sourcepoint.getPositionx()+10), (sourcepoint.getPositiony()+10), (destpoint.getPositionx()+10), (destpoint.getPositiony()+10));
+            }
+        }
     }
     public void refresh() {
         repaint();
