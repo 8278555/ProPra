@@ -1,19 +1,7 @@
 package Testobjekte;
 import Release.*;
 import java.awt.*;
-import java.awt.RenderingHints.Key;
 import java.awt.event.*;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ImageObserver;
-import java.awt.image.RenderedImage;
-import java.awt.image.renderable.RenderableImage;
-import java.text.AttributedCharacterIterator;
-import java.util.Map;
-
 import javax.swing.*;
 
 public class WFEMainWindow extends JFrame {
@@ -70,26 +58,31 @@ public class WFEMainWindow extends JFrame {
 
         
         jMenuItemFileNew.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent evt) {
                 jMenuItemFileNewMouseClicked(evt);
             }
         });
         jMenuItemFileOpen.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent evt) {
                 jMenuItemFileOpenMouseClicked(evt);
             }
         });
         jMenuItemFileSave.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent evt) {
                 jMenuItemFileSaveMouseClicked(evt);
             }
         });
         jMenuItemFileSaveAs.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent evt) {
                 jMenuItemFileSaveAsMouseClicked(evt);
             }
         });
         jMenuItemFileClose.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent evt) {
                 jMenuItemFileCloseMouseClicked(evt);
             }
@@ -124,7 +117,6 @@ public class WFEMainWindow extends JFrame {
 
         
         layout = new BorderLayout();
-        myCanvas = new Canvas();
 
         
         this.setTitle("Fenstertext");
@@ -175,6 +167,4 @@ public class WFEMainWindow extends JFrame {
     private JScrollBar jScrollBar2;
     private WFEPanel panel;
     private BorderLayout layout;
-    private Canvas myCanvas;
-    private WFEModelNet netz;
 }

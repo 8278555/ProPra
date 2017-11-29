@@ -1,11 +1,7 @@
 package Testobjekte;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.LayoutManager;
-
+import java.awt.*;
 import javax.swing.JPanel;
-
 import Release.*;
 
 
@@ -13,31 +9,11 @@ public class WFEPanel extends JPanel {
 
     private IPetriNamedElements sourcepoint;
     private IPetriNamedElements destpoint;
-
     
-	public WFEPanel() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public WFEPanel(LayoutManager arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
-	public WFEPanel(boolean arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
 	public WFEPanel(WFEModelNet petrinetz) {
 		this.petrinetz = petrinetz;
 	}
 
-	
-	public WFEPanel(LayoutManager arg0, boolean arg1) {
-		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
-	}
 	
 	private WFEModelNet petrinetz;
 	
