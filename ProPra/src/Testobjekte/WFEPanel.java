@@ -1,21 +1,43 @@
 package Testobjekte;
 
 import java.awt.*;
-import javax.swing.JPanel;
-import Release.*;
+import java.awt.event.*;
 
+import javax.swing.*;
+import Release.*;
 
 public class WFEPanel extends JPanel {
 
     private IPetriNamedElements sourcepoint;
     private IPetriNamedElements destpoint;
+    private WFEModelNet petrinetz;
+    private int startx;
+    private int starty;
+    private String elemToMove;
+    private int elemsizefactor;
     
 	public WFEPanel(WFEModelNet petrinetz) {
 		this.petrinetz = petrinetz;
+		elemsizefactor = 20;
+        this.addMouseListener(new MouseAdapter() {
+        	public void mouseClicked(MouseEvent evt) {
+        		panelClicked(evt);
+        	}
+        	public void mousePressed(MouseEvent evt2) {
+            	panelPressed(evt2);
+        	}
+        	public void mouseReleased(MouseEvent evt3) {
+        		panelReleased(evt3);
+        	}
+        });
+
 	}
 
+	public void setelemsizefactor(int newsize) {
+		elemsizefactor = newsize;
+		refresh();
+	}
 	
-	private WFEModelNet petrinetz;
 	
     @Override
     public void paintComponent(Graphics g) {
@@ -30,7 +52,7 @@ public class WFEPanel extends JPanel {
     	for (int i = 0; i< petrinetz.getListSize(); i++) {
     		if (petrinetz.petriElements.get(i) instanceof WFEModelPlace) {
     			WFEModelPlace stelle = (WFEModelPlace) petrinetz.petriElements.get(i);
-    			g.drawOval(stelle.getPositionx(), stelle.getPositiony(), 20, 20);
+    			g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
     		}
     	}
     }
@@ -38,7 +60,7 @@ public class WFEPanel extends JPanel {
     	for (int i = 0; i< petrinetz.getListSize(); i++) {
     		if (petrinetz.petriElements.get(i) instanceof WFEModelTransition) {
     			WFEModelTransition transition = (WFEModelTransition) petrinetz.petriElements.get(i);
-    			g.drawRect(transition.getPositionx(), transition.getPositiony(), 20, 20);
+    			g.fillRect(transition.getPositionx(), transition.getPositiony(), elemsizefactor, elemsizefactor);
     		}
     	}
     }
@@ -58,10 +80,45 @@ public class WFEPanel extends JPanel {
                         }
                     }
                 }
-                g.drawLine((sourcepoint.getPositionx()+10), (sourcepoint.getPositiony()+10), (destpoint.getPositionx()+10), (destpoint.getPositiony()+10));
+                g.drawLine((sourcepoint.getPositionx()+elemsizefactor/2), (sourcepoint.getPositiony()+elemsizefactor/2), (destpoint.getPositionx()+elemsizefactor/2), (destpoint.getPositiony()+elemsizefactor/2));
             }
         }
     }
+    
+    private String panelClicked(MouseEvent evt) {  	
+    	int xpressed = evt.getX();
+    	int ypressed = evt.getY();
+    	String choosenElem;
+    	choosenElem = "";
+    	for (int k = 0; k< petrinetz.getListSize(); k++) {
+    		if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
+    			IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
+    			if (xpressed >= currElem.getPositionx() && xpressed <= (currElem.getPositionx()+elemsizefactor)&& ypressed >= currElem.getPositiony() && ypressed <= (currElem.getPositiony()+elemsizefactor)) {
+    				choosenElem = currElem.GetID();
+    			}
+    		}
+    	}
+    	return choosenElem;
+    }
+    
+    private void panelPressed(MouseEvent evt2) {
+    	startx = evt2.getX();
+		starty = evt2.getY();
+		elemToMove = panelClicked(evt2);
+    }
+
+    private void panelReleased(MouseEvent evt3) {
+    	for (int l = 0; l< petrinetz.getListSize(); l++) {
+    		if (petrinetz.petriElements.get(l) instanceof IPetriNamedElements) {
+    			IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(l);
+    			if (currElem.GetID().equals(elemToMove)) {
+    				currElem.setPosition((evt3.getX()-elemsizefactor/2), (evt3.getY()-elemsizefactor/2));
+    				refresh();
+    			}
+    		}
+    	}
+    }
+    
     public void refresh() {
         repaint();
     }
