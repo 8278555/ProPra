@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.File;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class WFEMainWindow extends JFrame {
 
@@ -46,10 +47,6 @@ public class WFEMainWindow extends JFrame {
         this.add(panel, BorderLayout.CENTER);
     }
     
-    //public void paintComponent(Graphics2D g) {
-    //	super.paintComponents(g);
-    //	g.drawRect(150, 150, 50, 50);
-    //}
 
     private void initComponents() {
 
@@ -174,13 +171,14 @@ public class WFEMainWindow extends JFrame {
 
 
     private void jMenuItemFileNewActionPerformed(ActionEvent evt) {                                        
-        System.out.println("my.numberaddition.NumberAdditionUI.jMenuItem3MouseClicked() Eintrag NEU");        // TODO add your handling code here:
-        WFEModelNet petrinetz = new WFEModelNet();
-    	WFEPanel editpanel = new WFEPanel(petrinetz);
-    	this.remove(editpanel);
-    	this.validate();
+        petrinetz = new WFEModelNet();
+    	if (panel != null) {
+            this.remove(panel);
+            this.validate();
+    	};
+        WFEPanel editpanel = new WFEPanel(petrinetz);
     	panel = editpanel;
-    	panel.startnew();
+    	editpanel.startnew();
     	this.add(editpanel, BorderLayout.CENTER);
     	this.panel.refresh();
     	panel.startnew();
@@ -190,6 +188,7 @@ public class WFEMainWindow extends JFrame {
 
     public void jMenuItemFileOpenActionPerformed(ActionEvent evt) {                                                
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("*.pnml", "pnml"));
         if (selectedPath == null) {
         	fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         	}
@@ -204,7 +203,11 @@ public class WFEMainWindow extends JFrame {
             PNMLParser pnmlParser = new MyPNMLParser(selectedFile, petrinetz);
             pnmlParser.initParser();
             pnmlParser.parse();
-        	WFEPanel editpanel = new WFEPanel(petrinetz);
+            if (panel != null) {
+                this.remove(panel);
+                this.validate();
+            };
+            WFEPanel editpanel = new WFEPanel(petrinetz);
         	panel = editpanel;
         	this.add(editpanel, BorderLayout.CENTER);
         	this.panel.refresh();
@@ -215,6 +218,7 @@ public class WFEMainWindow extends JFrame {
     private void jMenuItemFileSaveActionPerformed(ActionEvent evt) {                                        
         System.out.println("my.numberaddition.NumberAdditionUI.jMenuItem4MouseClicked() Eintrag Save");        // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("*.pnml", "pnml"));
         if (selectedFile == null) {
             if (selectedPath == null) {
             	fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -222,10 +226,16 @@ public class WFEMainWindow extends JFrame {
             else {
             	fileChooser.setCurrentDirectory(selectedPath);
             }
-            int result = fileChooser.showOpenDialog(this);
+            int result = fileChooser.showSaveDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 selectedFile = fileChooser.getSelectedFile();
                 selectedPath = fileChooser.getCurrentDirectory();
+                if (!selectedFile.toString().matches(".*.pnml.*")) {
+                    File file2 = new File(selectedFile.toString()+".pnml");
+                    System.out.println(file2.toString());
+                    selectedFile.renameTo(file2);
+                    System.out.println(selectedFile.toString());        
+                }
             }
         }
         PNMLWriter pnmlWriter = new PNMLWriter(selectedFile);
@@ -250,13 +260,14 @@ public class WFEMainWindow extends JFrame {
     private void jMenuItemFileSaveAsActionPerformed(ActionEvent evt) {                                        
     	System.out.println("my.numberaddition.NumberAdditionUI.jMenuItem6MouseClicked() Eintrag SaveAs");        // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("*.pnml", "pnml"));
         if (selectedPath == null) {
         	fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         	}
         else {
         	fileChooser.setCurrentDirectory(selectedPath);
         }
-        int result = fileChooser.showOpenDialog(this);
+        int result = fileChooser.showSaveDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             selectedFile = fileChooser.getSelectedFile();
             selectedPath = fileChooser.getCurrentDirectory();

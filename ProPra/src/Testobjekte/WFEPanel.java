@@ -11,8 +11,8 @@ public class WFEPanel extends JPanel {
     private IPetriNamedElements sourcepoint;
     private IPetriNamedElements destpoint;
     private WFEModelNet petrinetz;
-    private int startx;
-    private int starty;
+    // private int startx;
+    // private int starty;
     private String elemToMove;
     private int elemsizefactor;
     
@@ -20,13 +20,16 @@ public class WFEPanel extends JPanel {
 		this.petrinetz = petrinetz;
 		elemsizefactor = 20;
         this.addMouseListener(new MouseAdapter() {
-        	public void mouseClicked(MouseEvent evt) {
+        	@Override
+            public void mouseClicked(MouseEvent evt) {
         		panelClicked(evt);
         	}
-        	public void mousePressed(MouseEvent evt2) {
+        	@Override
+            public void mousePressed(MouseEvent evt2) {
             	panelPressed(evt2);
         	}
-        	public void mouseReleased(MouseEvent evt3) {
+        	@Override
+            public void mouseReleased(MouseEvent evt3) {
         		panelReleased(evt3);
         	}
         });
@@ -42,13 +45,13 @@ public class WFEPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        drawPlace(g2);
-        drawTransition(g2);
-        drawArc(g2);
+        // Graphics2D g2 = (Graphics2D) g;
+        drawPlace(g);
+        drawTransition(g);
+        drawArc(g);
     }
     
-    protected void drawPlace(Graphics2D g) {
+    protected void drawPlace(Graphics g) {
     	for (int i = 0; i< petrinetz.getListSize(); i++) {
     		if (petrinetz.petriElements.get(i) instanceof WFEModelPlace) {
     			WFEModelPlace stelle = (WFEModelPlace) petrinetz.petriElements.get(i);
@@ -56,7 +59,7 @@ public class WFEPanel extends JPanel {
     		}
     	}
     }
-    protected void drawTransition(Graphics2D g) {
+    protected void drawTransition(Graphics g) {
     	for (int i = 0; i< petrinetz.getListSize(); i++) {
     		if (petrinetz.petriElements.get(i) instanceof WFEModelTransition) {
     			WFEModelTransition transition = (WFEModelTransition) petrinetz.petriElements.get(i);
@@ -65,7 +68,7 @@ public class WFEPanel extends JPanel {
     	}
     }
     
-    protected void drawArc(Graphics2D g) {
+    protected void drawArc(Graphics g) {
         for (int i = 0; i< petrinetz.getListSize(); i++) {
             if (petrinetz.petriElements.get(i) instanceof WFEModelArc) {
                 WFEModelArc kante = (WFEModelArc) petrinetz.petriElements.get(i);
@@ -102,8 +105,8 @@ public class WFEPanel extends JPanel {
     }
     
     private void panelPressed(MouseEvent evt2) {
-    	startx = evt2.getX();
-		starty = evt2.getY();
+    	// startx = evt2.getX();
+		// starty = evt2.getY();
 		elemToMove = panelClicked(evt2);
     }
 
@@ -127,6 +130,6 @@ public class WFEPanel extends JPanel {
     }
     
     public void refresh() {
-    	repaint();
+        repaint();
     }
 }
