@@ -9,7 +9,7 @@ public class WFEModelNet implements IWFEModelNet{
 	String filename;
 	int i;
 	//String id;
-	public WFEModelNet(String filename) {
+	public WFEModelNet() {
 		petriElements = new ArrayList<IPetriElements>();
 	}
 	

@@ -119,7 +119,14 @@ public class WFEPanel extends JPanel {
     	}
     }
     
+    public void startnew() {
+    	petrinetz.petriElements.clear();
+    	removeAll();
+    	revalidate();
+    	refresh();
+    }
+    
     public void refresh() {
-        repaint();
+    	repaint();
     }
 }

@@ -18,15 +18,23 @@ public class Pfeiltesterpanel extends JPanel {
 	int y4;
 	int x5;
 	int y5;
-	double m1;
-	double m2;
-	
+	double doubleX3;
+	double doubleY3;
+	double doubleX4;
+	double doubleY4;
+	double doubleX5;
+	double doubleY5;
+	int factor;
+	double d;
+	double e;
+
 		
 	public Pfeiltesterpanel() {
-		x1 = 10;
-		y1 = 10;
-		x2 = 10;
+		x1 = 0;
+		y1 = 0;
+		x2 = 300;
 		y2 = 300;
+		factor = 20;
 	}
 
     public void paintComponent(Graphics g) {
@@ -38,62 +46,95 @@ public class Pfeiltesterpanel extends JPanel {
 	public void drawLine(Graphics2D g2) {
 		g2.drawLine(x1, y1, x2, y2);
 		calcTrianglePoints();
-//		g2.drawLine(x4, y4, x5, y5);
-		g2.drawLine(x3, y3, 490, 400);
-		//g2.drawArc(x2, y2, 100, 100, 45, 270);
-		
+		g2.drawLine(x3, y3, x4, y4);
+		g2.drawLine(x4, y4, x2, y2);
 		
 	}
 	public void calcTrianglePoints() {
-		m1 = (double)Math.abs(y1-y2);
-		m2 = (double)Math.abs(x1-x2);
-		double alphahelp = 90-(Math.toDegrees(Math.atan2((double)(y1-y2), (x1-x2)))%90);
-		double alpha = Math.sqrt(alphahelp*alphahelp);
-		double sinalpha;
-		if (Math.sin(alpha)<0) {
-			sinalpha = (Math.sin(alpha) * (-1));
+//		m1 = Math.abs((double)y1-(double)y2);
+//		m2 = Math.abs((double)x1-(double)x2);
+		double alpha = 90-(Math.sqrt((90-(Math.toDegrees(Math.atan2((double)(y1-y2), (x1-x2)))%90))*(90-(Math.toDegrees(Math.atan2((double)(y1-y2), (x1-x2)))%90)))%90);
+		double sinalpha = Math.abs(Math.sin(alpha));
+		double delta = 90-alpha;
+		double sindelta = Math.abs(Math.sin(delta));
+		double distA = (sinalpha)*factor;
+		double distB = Math.sqrt((factor*factor)-(distA*distA));
+		double distE = sindelta*(factor/2);
+		double distF = Math.sqrt(((factor/2)*(factor/2))-(distE*distE));
+		double a = (double)(y2-y1)/(double)(x2-x1);
+		double b = (double)y2-(a*(double)x2);
+		
+		if (alpha<=45) {
+			if (x1<x2) {			
+				doubleX3 = ((double)x2 - distB);
+				doubleX4 = doubleX3 + distF;
+				doubleX5 = doubleX3 - distF;
+			}
+			else if (x1>x2) {
+				doubleX3 = ((double)x2 + distB);
+				doubleX4 = doubleX3 - distF;
+				doubleX5 = doubleX3 + distF;
+
+			}
+			else if (x1==x2) {
+				doubleX3 = x2;
+				a=1;
+				b=-20;
+			}
+			d = (doubleY3-(double)y2)/(doubleX3-(double)x2);
+			e = doubleY3 - (d*doubleX3);
+			x3 = (int)(Math.round(doubleX3));
+			y3 = (int)(Math.round(a*doubleX3+b));
+			x4 = (int)(Math.round(doubleX4));
+			y4 = (int)(Math.round(doubleX3-(doubleX4-doubleX3)));
+//			y4 = (int)(Math.round(doubleY3+distE));
+//			y4=283;
+			x5 = (int)(Math.round(doubleX5));
+			y5 = (int)(Math.round(d*doubleX5+e));
 		}
-		else {sinalpha = Math.sin(alpha);}
-		double a = (sinalpha)*50;
-		double b = (Math.cos(alpha))*100;
-		double coeff = (m1 / m2);
 		
-//		double betahelp1 = Math.toDegrees(Math.atan2((double)(x1-x2), (y1-y2)))%90;
-//		double beta1 = Math.sqrt(betahelp1*betahelp1);
-//		double a1 = (Math.cos(beta1))*10;
-//		double b1 = (Math.cos(90-beta1)*10);
-		
+		if (alpha>45) {
+			if (y1<y2) {			
+				doubleY3 = ((double)y2 - distB);
+				doubleY4 = doubleY3 + distF;
+				doubleY5 = doubleY3 - distF;
+			}
+			else if (y1>y2) {
+				doubleY3 = ((double)y2 + distB);
+				doubleY4 = doubleY3 - distF;
+				doubleY5 = doubleY3 + distF;
+			}
+			else if (y1==y2) {
+				y3 = y2;
+				a=1;
+				b=20;
+			}
+			d = (doubleY3-(double)y2)/(doubleX3-(double)x2);
+			e = doubleY3 - (d*doubleX3);
+			x3 = (int)(Math.round((doubleY3-b)/a));
+			y3 = (int)(Math.round(doubleY3));
+			x4 = (int)(Math.round((doubleY4-e)/d));
+			y4 = (int)(Math.round(doubleY4));
+			x5 = (int)(Math.round((doubleY5-e)/d));
+			y5 = (int)(Math.round(doubleY5));
+		}
+//		System.out.println("X1: " + x1);
+//		System.out.println("Y1: " + y1);
+//		System.out.println("X2: " + x2);
+//		System.out.println("Y2: " + y2);
+		System.out.println("X3: " + x3);
+		System.out.println("Y3: " + y3);
+		System.out.println("X4: " + x4);
+		System.out.println("Y4: " + y4);
+//		System.out.println("X5: " + x5);
+//		System.out.println("Y5: " + y5);
+		System.out.println("a: " + a);
+		System.out.println("b: " + b);
+		System.out.println("D: " + d);
+		System.out.println("E: " + e);
+		System.out.println("Delta: " + delta);
 		System.out.println("Alpha: " + alpha);
-		System.out.println("Sin Alpha: " + sinalpha);
-		System.out.println("A: " + a);
-		System.out.println("B: " + b);
-		System.out.println("Y-Dist M1: " + m1);
-		System.out.println("X-Dist M2: " + m2);
-		System.out.println("Coeff: " + coeff);
-		
-		if (x1<x2) {
-			x3 = (int)Math.round((double)x2 - a);
-		}
-		else if (x1>x2) {
-			x3 = (int)Math.round((double)x2 + a);
-		}
-		else if (x1==x2) {
-			x3 = x2;
-		}
-
-		
-		if (y1<y2) {
-			y3 = (int)Math.round((double)x3 * coeff);
-		}
-		else if (y1>y2) {
-			y3 = (x3 * (int)Math.round(coeff));
-		}
-		else if (y1==y2) {
-			y3 = (x3 * (int)Math.round(coeff));
-		}
-		System.out.println("X3:" + x3);
-		System.out.println("Y3:" + y3);
-
-		
+		System.out.println("DistE: " + distE);
+		System.out.println("DistF: " + distF);
 	}
 }

@@ -16,7 +16,7 @@ public class Testklasse {
             File pnmlOutDatei = new File("C:\\Users\\daniel.brenner\\Documents\\Uni\\2017_2018_ws_aufgabenstellung\\Beispiele\\Eigene\\Beispiel-03.pnml");
             if (pnmlOutDatei.exists() == false) {
             	PNMLWriter pnmlWriter = new PNMLWriter(pnmlOutDatei);
-            	final WFEModelNet petrinetz = new WFEModelNet("Testname");
+            	final WFEModelNet petrinetz = new WFEModelNet();
             	petrinetz.addTransition("transition1");
             	petrinetz.addTransition("transition2");
             	petrinetz.addPlace("place1");
