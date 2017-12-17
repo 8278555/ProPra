@@ -23,13 +23,12 @@ public class WFEMainWindow extends JFrame {
     private JMenuItem jMenuItemNewArc;
     private JMenuItem jMenuItemNetTestRun;
     private JMenuItem jMenuItemNetSettings;
-    private JScrollBar jScrollBar1;
-    private JScrollBar jScrollBar2;
     private WFEPanel panel;
     private BorderLayout layout;
     private File selectedPath;
     private File selectedFile;
     private WFEModelNet petrinetz;
+//    private JScrollPane scrollPane;
     
 	private static final long serialVersionUID = 1L;
 	
@@ -37,6 +36,8 @@ public class WFEMainWindow extends JFrame {
 		setPreferredSize(new Dimension(500, 500));
 		this.setTitle(title);
 		initComponents();
+//		scrollPane = new JScrollPane();
+//		this.add(scrollPane);
 	}
 	
 	public WFEMainWindow(String title, WFEPanel testpanel, WFEModelNet netz) {
@@ -44,18 +45,16 @@ public class WFEMainWindow extends JFrame {
 		this.setTitle(title);
 		this.panel = testpanel;
 		initComponents();
-        this.add(panel, BorderLayout.CENTER);
+		this.add(panel, BorderLayout.CENTER);
+//        scrollPane = new JScrollPane(panel);
+//		this.add(scrollPane, BorderLayout.CENTER);
+//		scrollPane.add(panel, BorderLayout.CENTER);    
     }
     
 
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-    	jScrollBar1 = new JScrollBar();
-    	jScrollBar1.setOrientation(JScrollBar.VERTICAL);
-    	jScrollBar2 = new JScrollBar();
-        jScrollBar2.setOrientation(JScrollBar.HORIZONTAL);
 
         jMenuBar1 = new JMenuBar();
 
@@ -101,7 +100,8 @@ public class WFEMainWindow extends JFrame {
         jMenuItemFileClose = new JMenuItem();
         jMenuItemFileClose.setText("Beenden");
         jMenuItemFileClose.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent evt) {
+        	@Override
+            public void actionPerformed(ActionEvent evt) {
         		jMenuItemFileCloseActionPerformed(evt);
         	}
         });
@@ -137,7 +137,8 @@ public class WFEMainWindow extends JFrame {
         jMenuItemNetSettings = new JMenuItem();
         jMenuItemNetSettings.setText("Einstellungen");
         jMenuItemNetSettings.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent evt) {
+        	@Override
+            public void actionPerformed(ActionEvent evt) {
         		int sizefactor = Integer.parseInt(JOptionPane.showInputDialog("Bitte gewünschten Größenfaktor angeben", "z.B. 25"));
         		panel.setelemsizefactor(sizefactor);
         	}
@@ -216,7 +217,6 @@ public class WFEMainWindow extends JFrame {
     }                                       
 
     private void jMenuItemFileSaveActionPerformed(ActionEvent evt) {                                        
-        System.out.println("my.numberaddition.NumberAdditionUI.jMenuItem4MouseClicked() Eintrag Save");        // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("*.pnml", "pnml"));
         if (selectedFile == null) {
@@ -232,9 +232,7 @@ public class WFEMainWindow extends JFrame {
                 selectedPath = fileChooser.getCurrentDirectory();
                 if (!selectedFile.toString().matches(".*.pnml.*")) {
                     File file2 = new File(selectedFile.toString()+".pnml");
-                    System.out.println(file2.toString());
                     selectedFile.renameTo(file2);
-                    System.out.println(selectedFile.toString());        
                 }
             }
         }
@@ -258,7 +256,6 @@ public class WFEMainWindow extends JFrame {
     }                                       
 
     private void jMenuItemFileSaveAsActionPerformed(ActionEvent evt) {                                        
-    	System.out.println("my.numberaddition.NumberAdditionUI.jMenuItem6MouseClicked() Eintrag SaveAs");        // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("*.pnml", "pnml"));
         if (selectedPath == null) {

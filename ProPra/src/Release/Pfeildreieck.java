@@ -1,4 +1,4 @@
-package Testobjekte;
+package Release;
 
 import java.awt.Polygon;
 
@@ -36,10 +36,6 @@ public class Pfeildreieck {
 		calcTrianglePoints();
 		int xPoints[] = {x2, x4, x5};
 		int yPoints[]= {y2, y4, y5};
-		System.out.println("Pfeilx1: " + x1);
-        System.out.println("Pfeily1: " + y1);
-        System.out.println("Pfeilx2: " + x2);
-		System.out.println("Pfeily2: " + y2);
 		Polygon p = new Polygon(xPoints, yPoints, 3);
 		return p;
 	}
