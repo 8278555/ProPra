@@ -31,9 +31,9 @@ public class Pfeiltesterpanel extends JPanel {
 		
 	public Pfeiltesterpanel() {
 		x1 = 300;
-		y1 = 300;
-		x2 = 300;
-		y2 = 100;
+		y1 = 100;
+		x2 = 100;
+		y2 = 425;
 		factor = 20;
 	}
 
@@ -56,8 +56,12 @@ public class Pfeiltesterpanel extends JPanel {
 
 		double alpha = 90-(Math.sqrt((90-(Math.toDegrees(Math.atan2((double)(y1-y2), (x1-x2)))%90))*(90-(Math.toDegrees(Math.atan2((double)(y1-y2), (x1-x2)))%90)))%90);
 		double sinalpha = Math.abs(Math.sin(Math.toRadians(alpha)));
+		double cosalpha = Math.abs(Math.cos(Math.toRadians(alpha)));
+        double sindelta = Math.abs(Math.sin(Math.toRadians(90-alpha)));
 		double cosdelta = Math.abs(Math.cos(Math.toRadians(90-alpha)));
-		double distB = Math.sqrt((factor*factor)-((sinalpha)*factor*(sinalpha)*factor));
+		double distA = (sinalpha)*factor;
+		double distB = (cosalpha)*factor;
+		double distE = (sindelta)*(factor/2);
 		double distF = (cosdelta)*(factor/2);
 		double a = (double)(y2-y1)/(double)(x2-x1);
 		double b = (double)y2-(a*(double)x2);
@@ -72,13 +76,13 @@ public class Pfeiltesterpanel extends JPanel {
 					doubleY5 = doubleY3 + (1/a*distF);
 				}
 				else if (y1>y2) {
-					doubleX3 = ((double)x2 - distB);
-					doubleY3 = a*doubleX3 + b;
-					doubleX4 = doubleX3 + distF;
-					doubleY4 = doubleY3 - (1/a*distF);
-					doubleX5 = doubleX3 - distF;
-					doubleY5 = doubleY3 + (1/a*distF);
-				}
+				    doubleX3 = ((double)x2 - distA);
+                    doubleY3 = a*doubleX3 + b;
+                    doubleX4 = doubleX3 + distE;
+                    doubleY4 = doubleY3 - (1/a*distE);
+                    doubleX5 = doubleX3 - distE;
+                    doubleY5 = doubleY3 + (1/a*distE);
+                    }
 				else if (y1==y2) {
 					doubleX3 = ((double)x2 - factor);
 					doubleY3 = (double)y2;
@@ -90,12 +94,12 @@ public class Pfeiltesterpanel extends JPanel {
 			}
 			else if (x1>x2) {
 				if (y1<y2) {
-					doubleX3 = ((double)x2 + distB);
+					doubleX3 = ((double)x2 + distA);
 					doubleY3 = a*doubleX3 + b;
-					doubleX4 = doubleX3 + distF;
-					doubleY4 = doubleY3 - (1/a*distF);
-					doubleX5 = doubleX3 - distF;
-					doubleY5 = doubleY3 + (1/a*distF);
+					doubleX4 = doubleX3 + distE;
+					doubleY4 = doubleY3 - (1/a*distE);
+					doubleX5 = doubleX3 - distE;
+					doubleY5 = doubleY3 + (1/a*distE);
 				}
 				else if (y1>y2) {
 					doubleX3 = ((double)x2 + distB);
@@ -142,6 +146,9 @@ public class Pfeiltesterpanel extends JPanel {
 					doubleY5 = doubleY3;
 				}
 			}
+			System.out.println("DistB: " + distB);
+			System.out.println("DistE: " + distE);
+			System.out.println("DistF: " + distF);
 			x3 = (int)Math.round(doubleX3);
 			y3 = (int)Math.round(doubleY3);
 			x4 = (int)Math.round(doubleX4);
