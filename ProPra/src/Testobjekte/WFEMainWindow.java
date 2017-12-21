@@ -164,9 +164,6 @@ public class WFEMainWindow extends JFrame {
         layout = new BorderLayout();       
         this.setLayout(layout);
         this.add(jMenuBar1, BorderLayout.NORTH);
-        //getContentPane().setLayout(layout);
-        //getContentPane().add(jMenuBar1, BorderLayout.NORTH);
-        //getContentPane().add(panel, BorderLayout.CENTER);        
         pack();
     }                        
 

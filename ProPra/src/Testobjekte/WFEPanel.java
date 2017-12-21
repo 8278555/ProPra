@@ -2,6 +2,7 @@ package Testobjekte;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import Release.*;
@@ -11,11 +12,62 @@ public class WFEPanel extends JPanel {
     private IPetriNamedElements sourcepoint;
     private IPetriNamedElements destpoint;
     private WFEModelNet petrinetz;
+    private int xstart;
+    private int ystart;
     private int elemsizefactor;
+    public ArrayList<IPetriElements> toModifyElements;
     
 	public WFEPanel(WFEModelNet petrinetz) {
 		this.petrinetz = petrinetz;
 		elemsizefactor = 20;
+		this.addMouseListener(new MouseListener() {
+            
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+            
+            @Override
+            public void mousePressed(MouseEvent e) {
+                xstart = e.getX();
+                ystart = e.getY();
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+            
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getButton() == MouseEvent.BUTTON1) {
+                    JOptionPane.showMessageDialog(null, 
+                            "Linksklick",
+                            "MouseButton", 
+                            JOptionPane.PLAIN_MESSAGE);
+                  }
+                  if(e.getButton() == MouseEvent.BUTTON2) {
+                      JOptionPane.showMessageDialog(null, 
+                              "Mittelklick",
+                              "MouseButton", 
+                              JOptionPane.PLAIN_MESSAGE);
+                    }
+                  if(e.getButton() == MouseEvent.BUTTON3) {
+                      JOptionPane.showMessageDialog(null, 
+                              "Rechtsklick",
+                              "MouseButton", 
+                              JOptionPane.PLAIN_MESSAGE);
+                     }
+            }
+        });
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -36,7 +88,6 @@ public class WFEPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Graphics2D g2 = (Graphics2D) g;
         drawPlace(g);
         drawTransition(g);
         drawArc(g);

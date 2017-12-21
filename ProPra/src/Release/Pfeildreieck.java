@@ -68,7 +68,7 @@ public class Pfeildreieck {
                 doubleX3 = (doubleY3-b)/a;		        
 		    }
 		}
-		else if (Math.abs(x1-x2)>Math.abs(y1-y2)) {
+		else if (Math.abs(x1-x2)>=Math.abs(y1-y2)) {
 		    if (x1<x2) {
 		        doubleX3 = (double)x2-factor/2;
 		        doubleY3 = a*doubleX3 + b;
