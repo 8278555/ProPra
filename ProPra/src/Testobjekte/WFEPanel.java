@@ -2,6 +2,8 @@ package Testobjekte;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.ImageObserver;
+import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -15,7 +17,11 @@ public class WFEPanel extends JPanel {
     private int xstart;
     private int ystart;
     private int elemsizefactor;
-    public ArrayList<IPetriElements> toModifyElements;
+    public ArrayList<IPetriElements> toModifyElements = new ArrayList<IPetriElements>();
+    private boolean singleElemClicked;
+    private boolean verschiebemodus;
+    int chooseFrameWidth;
+    int chooseFrameHeight;
     
 	public WFEPanel(WFEModelNet petrinetz) {
 		this.petrinetz = petrinetz;
@@ -25,13 +31,53 @@ public class WFEPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+            	if(e.getButton() == MouseEvent.BUTTON1) {
+            		if (singleElemClicked == false) {
+            			if (verschiebemodus == false) {
+            				for (int k = 0; k< petrinetz.getListSize(); k++) {
+                                if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
+                                	IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
+                                    if (xstart <= currElem.getPositionx() && e.getX() >= (currElem.getPositionx()+elemsizefactor)&& ystart <= currElem.getPositiony() && e.getY() >= (currElem.getPositiony()+elemsizefactor)) {
+                                        System.out.println("Nr " + k + ": X: " + currElem.getPositionx() + " Y: " + currElem.getPositiony());
+                                    	toModifyElements.add(currElem);
+                                    	verschiebemodus = true;
+                                    }
+                                }
+                            }
+            			}
+            			else {
+            				verschiebemodus = false;
+            				toModifyElements.clear();
+            				}
+            			}
+            		else {toModifyElements.clear();}
+        			xstart = 0;
+        			ystart = 0;
+        			chooseFrameWidth = 0;
+        			chooseFrameHeight = 0;
+        			refresh();
+                  }
             }
             
             @Override
             public void mousePressed(MouseEvent e) {
                 xstart = e.getX();
                 ystart = e.getY();
+                for (int k = 0; k< petrinetz.getListSize(); k++) {
+                    if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
+                        IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
+                        if (xstart >= currElem.getPositionx() && xstart <= (currElem.getPositionx()+elemsizefactor)&& ystart >= currElem.getPositiony() && ystart <= (currElem.getPositiony()+elemsizefactor)) {
+                            if (toModifyElements.isEmpty()) {
+                            	toModifyElements.add(currElem);	
+                            }                       	
+                            singleElemClicked = true;
+                            break;
+                        }
+                        else {
+                        	singleElemClicked = false;
+                        }
+                    }
+                }
             }
             
             @Override
@@ -48,9 +94,9 @@ public class WFEPanel extends JPanel {
             
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(e.getButton() == MouseEvent.BUTTON1) {
+            /*/    if(e.getButton() == MouseEvent.BUTTON1) {
                     JOptionPane.showMessageDialog(null, 
-                            "Linksklick",
+                            "Pressed Linksklick auf X: " + xstart + " Y: " + ystart,
                             "MouseButton", 
                             JOptionPane.PLAIN_MESSAGE);
                   }
@@ -66,7 +112,7 @@ public class WFEPanel extends JPanel {
                               "MouseButton", 
                               JOptionPane.PLAIN_MESSAGE);
                      }
-            }
+            /*/}
         });
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -91,7 +137,9 @@ public class WFEPanel extends JPanel {
         drawPlace(g);
         drawTransition(g);
         drawArc(g);
+        g.drawRect(xstart, ystart, chooseFrameWidth, chooseFrameHeight);
     }
+    
     
     protected void drawPlace(Graphics g) {
     	for (int i = 0; i< petrinetz.getListSize(); i++) {
@@ -133,31 +181,32 @@ public class WFEPanel extends JPanel {
     }
     
     private void panelDragged(MouseEvent e) {
-        int xpressed = e.getX();
-        int ypressed = e.getY();
-        String choosenElem;
-        choosenElem = "";
-        for (int k = 0; k< petrinetz.getListSize(); k++) {
-            if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
-                IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
-                if (xpressed >= currElem.getPositionx() && xpressed <= (currElem.getPositionx()+elemsizefactor)&& ypressed >= currElem.getPositiony() && ypressed <= (currElem.getPositiony()+elemsizefactor)) {
-                    choosenElem = currElem.GetID();
-                }
-                else {
-                    //TODO: Rahmen zeichnen und alle Elemente im Rahmen auswählen
+        IPetriNamedElements choosenElem;
+        if (toModifyElements.size()==0) {
+        	chooseFrameWidth = e.getX()-xstart;
+        	chooseFrameHeight = e.getY()-ystart;
+        	refresh();
+        }
+        else {
+        	for (int p = 0; p<toModifyElements.size();p++) {
+            	choosenElem = (IPetriNamedElements) toModifyElements.get(p);
+                for (int l = 0; l< petrinetz.getListSize(); l++) {
+                    if (petrinetz.petriElements.get(l) instanceof IPetriNamedElements) {
+                        IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(l);
+                        if (currElem.GetID().equals(choosenElem.GetID())) {
+                        	int newx = currElem.getPositionx() + (e.getX() - xstart);
+                        	int newy = currElem.getPositiony() + (e.getY() - ystart);
+                        	currElem.setPosition((newx), (newy));
+                            refresh();
+                        }
+                    }
                 }
             }
-        }
-        for (int l = 0; l< petrinetz.getListSize(); l++) {
-            if (petrinetz.petriElements.get(l) instanceof IPetriNamedElements) {
-                IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(l);
-                if (currElem.GetID().equals(choosenElem)) {
-                    currElem.setPosition((e.getX()-elemsizefactor/2), (e.getY()-elemsizefactor/2));
-                    refresh();
-                }
-            }
-        }
+        	xstart = e.getX();
+        	ystart = e.getY();
+        }    	
     }
+    
     public void startnew() {
     	petrinetz.petriElements.clear();
     	removeAll();
