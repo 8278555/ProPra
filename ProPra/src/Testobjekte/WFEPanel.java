@@ -18,7 +18,7 @@ public class WFEPanel extends JPanel {
     private int ystart;
     private int elemsizefactor;
     public ArrayList<IPetriElements> toModifyElements = new ArrayList<IPetriElements>();
-    private boolean singleElemClicked;
+
     private boolean verschiebemodus;
     int chooseFrameWidth;
     int chooseFrameHeight;
@@ -30,28 +30,24 @@ public class WFEPanel extends JPanel {
             
             @Override
             public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
             	if(e.getButton() == MouseEvent.BUTTON1) {
-            		if (singleElemClicked == false) {
-            			if (verschiebemodus == false) {
-            				for (int k = 0; k< petrinetz.getListSize(); k++) {
-                                if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
-                                	IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
-                                    if (xstart <= currElem.getPositionx() && e.getX() >= (currElem.getPositionx()+elemsizefactor)&& ystart <= currElem.getPositiony() && e.getY() >= (currElem.getPositiony()+elemsizefactor)) {
-                                        System.out.println("Nr " + k + ": X: " + currElem.getPositionx() + " Y: " + currElem.getPositiony());
-                                    	toModifyElements.add(currElem);
-                                    	verschiebemodus = true;
-                                    }
+            		if (verschiebemodus == false) {
+        				for (int k = 0; k< petrinetz.getListSize(); k++) {
+                            if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
+                            	IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
+                                if (xstart <= currElem.getPositionx() && e.getX() >= (currElem.getPositionx()+elemsizefactor)&& ystart <= currElem.getPositiony() && e.getY() >= (currElem.getPositiony()+elemsizefactor)) {
+                                    System.out.println("Nr " + k + ": X: " + currElem.getPositionx() + " Y: " + currElem.getPositiony());
+                                	toModifyElements.add(currElem);
+                                	verschiebemodus = true;
                                 }
                             }
-            			}
-            			else {
-            				verschiebemodus = false;
-            				toModifyElements.clear();
-            				}
-            			}
-            		else {toModifyElements.clear();}
-        			xstart = 0;
+                        }
+        			}
+        			else {
+        				verschiebemodus = false;
+        				toModifyElements.clear();
+        			}
+            		xstart = 0;
         			ystart = 0;
         			chooseFrameWidth = 0;
         			chooseFrameHeight = 0;
@@ -70,11 +66,8 @@ public class WFEPanel extends JPanel {
                             if (toModifyElements.isEmpty()) {
                             	toModifyElements.add(currElem);	
                             }                       	
-                            singleElemClicked = true;
+                            verschiebemodus = true;
                             break;
-                        }
-                        else {
-                        	singleElemClicked = false;
                         }
                     }
                 }
