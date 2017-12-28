@@ -10,7 +10,7 @@ public class Fenstertester {
 
 	public static void main(String[] args) {
 		
-        File pnmlDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Beispiel-0001.pnml");
+        File pnmlDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Eigene/Beispiel-03.pnml");
         //File pnmlDatei = new File("C:\\Users\\daniel.brenner\\Documents\\Uni\\2017_2018_ws_aufgabenstellung\\Beispiele\\Beispiel-01.pnml");
         if (pnmlDatei.exists()) {
         	final WFEModelNet petrinetz = new WFEModelNet();
@@ -24,6 +24,7 @@ public class Fenstertester {
         } 
         else {
         	WFEMainWindow testfenster = new WFEMainWindow("Daniel Brenner, Mat-Nr: 8278555");
+        	;
         	testfenster.setVisible(true);
 //            System.err.println("Die Datei " + pnmlDatei.getAbsolutePath()
 //                    + " wurde nicht gefunden!");

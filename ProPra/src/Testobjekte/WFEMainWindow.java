@@ -28,26 +28,45 @@ public class WFEMainWindow extends JFrame {
     private File selectedPath;
     private File selectedFile;
     private WFEModelNet petrinetz;
-//    private JScrollPane scrollPane;
+    private JScrollPane scroller;
     
 	private static final long serialVersionUID = 1L;
+	private JPanel panel_1;
 	
 	public WFEMainWindow(String title) {
 		setPreferredSize(new Dimension(500, 500));
 		this.setTitle(title);
 		initComponents();
-//		scrollPane = new JScrollPane();
-//		this.add(scrollPane);
 	}
 	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public WFEMainWindow(String title, WFEPanel testpanel, WFEModelNet netz) {
 		setPreferredSize(new Dimension(800, 800));
 		this.setTitle(title);
 		this.panel = testpanel;
+		JPanel scrollbaresPanel = new JPanel();
+		scrollbaresPanel = testpanel;
 		initComponents();
-		this.add(panel, BorderLayout.CENTER);
-//        scrollPane = new JScrollPane(panel);
-//		this.add(scrollPane, BorderLayout.CENTER);
+		panel.setPreferredSize(new Dimension (500, 500));
+		scroller = new JScrollPane(scrollbaresPanel);
+        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroller.setBounds(50, 30, 300, 50);
+        
+		//panel.add(scrollPane);
+        this.getContentPane().add(scroller, BorderLayout.CENTER);
+        scroller.setViewportView(panel);
+        panel.setBackground(Color.BLUE);
+        panel_1 = new JPanel();
+        panel_1.setLayout(new BorderLayout());
+        panel_1.add(testpanel, BorderLayout.CENTER);
+        panel_1.setOpaque(true);
+//        panel_1 = testpanel;
+        scroller.setViewportView(panel_1);
+		this.setContentPane(scroller);
+      //this.add(panel, BorderLayout.CENTER);
 //		scrollPane.add(panel, BorderLayout.CENTER);    
     }
     
@@ -160,10 +179,10 @@ public class WFEMainWindow extends JFrame {
         
         jMenuBar1.add(jMenuFile);
         jMenuBar1.add(jMenuNet);
-
+        
         layout = new BorderLayout();       
-        this.setLayout(layout);
-        this.add(jMenuBar1, BorderLayout.NORTH);
+        getContentPane().setLayout(layout);
+        getContentPane().add(jMenuBar1, BorderLayout.NORTH);
         pack();
     }                        
 
@@ -177,7 +196,7 @@ public class WFEMainWindow extends JFrame {
         WFEPanel editpanel = new WFEPanel(petrinetz);
     	panel = editpanel;
     	editpanel.startnew();
-    	this.add(editpanel, BorderLayout.CENTER);
+    	getContentPane().add(editpanel, BorderLayout.CENTER);
     	this.panel.refresh();
     	panel.startnew();
     	this.update(getGraphics());
@@ -207,7 +226,11 @@ public class WFEMainWindow extends JFrame {
             };
             WFEPanel editpanel = new WFEPanel(petrinetz);
         	panel = editpanel;
-        	this.add(editpanel, BorderLayout.CENTER);
+        	JScrollPane scroller = new JScrollPane(panel);
+        	//scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            //scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        	setPreferredSize(new Dimension(500, 500));
+        	getContentPane().add(scroller, BorderLayout.CENTER);
         	this.panel.refresh();
         	pack();
         }

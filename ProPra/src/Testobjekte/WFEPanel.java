@@ -2,8 +2,6 @@ package Testobjekte;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.ImageObserver;
-import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -64,15 +62,37 @@ public class WFEPanel extends JPanel {
                         IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
                         if (xstart >= currElem.getPositionx() && xstart <= (currElem.getPositionx()+elemsizefactor)&& ystart >= currElem.getPositiony() && ystart <= (currElem.getPositiony()+elemsizefactor)) {
                             if (toModifyElements.isEmpty()) {
-                            	toModifyElements.add(currElem);	
+                            	toModifyElements.add(currElem);
                             }                       	
                             verschiebemodus = true;
+                            refresh();
                             break;
                         }
                     }
                 }
             }
             
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getButton() == MouseEvent.BUTTON1) {
+                    /*/JOptionPane.showMessageDialog(null, 
+                    "Pressed Linksklick auf X: " + e.getX() + " Y: " + e.getY(),
+                    "MouseButton", 
+                    JOptionPane.PLAIN_MESSAGE);/*/
+                }
+                /*/      if(e.getButton() == MouseEvent.BUTTON2) {
+                      JOptionPane.showMessageDialog(null, 
+                              "Mittelklick",
+                              "MouseButton", 
+                              JOptionPane.PLAIN_MESSAGE);
+                    }/*/
+                if(e.getButton() == MouseEvent.BUTTON3) {
+                      /*/JOptionPane.showMessageDialog(null, 
+                              "Rechtsklick",
+                              "MouseButton", 
+                              JOptionPane.PLAIN_MESSAGE);/*/
+                }
+            }
             @Override
             public void mouseExited(MouseEvent e) {
                 // TODO Auto-generated method stub
@@ -85,27 +105,7 @@ public class WFEPanel extends JPanel {
                 
             }
             
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            /*/    if(e.getButton() == MouseEvent.BUTTON1) {
-                    JOptionPane.showMessageDialog(null, 
-                            "Pressed Linksklick auf X: " + xstart + " Y: " + ystart,
-                            "MouseButton", 
-                            JOptionPane.PLAIN_MESSAGE);
-                  }
-                  if(e.getButton() == MouseEvent.BUTTON2) {
-                      JOptionPane.showMessageDialog(null, 
-                              "Mittelklick",
-                              "MouseButton", 
-                              JOptionPane.PLAIN_MESSAGE);
-                    }
-                  if(e.getButton() == MouseEvent.BUTTON3) {
-                      JOptionPane.showMessageDialog(null, 
-                              "Rechtsklick",
-                              "MouseButton", 
-                              JOptionPane.PLAIN_MESSAGE);
-                     }
-            /*/}
+ 
         });
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -138,7 +138,24 @@ public class WFEPanel extends JPanel {
     	for (int i = 0; i< petrinetz.getListSize(); i++) {
     		if (petrinetz.petriElements.get(i) instanceof WFEModelPlace) {
     			WFEModelPlace stelle = (WFEModelPlace) petrinetz.petriElements.get(i);
-    			g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+    			if (toModifyElements.size()!=0) {
+    				for (int k = 0; k<toModifyElements.size();k++) {
+    					if (stelle.equals(toModifyElements.get(k))) {
+    						g.setColor(Color.RED);
+    						g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+    						g.setColor(Color.BLACK);
+    						g.drawOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+    						break;
+    					}
+    					else {
+    						g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+    						//break;
+    					}
+    				}
+    			}
+    			else {
+    				g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+    			}
     		}
     	}
     }
@@ -146,7 +163,24 @@ public class WFEPanel extends JPanel {
     	for (int i = 0; i< petrinetz.getListSize(); i++) {
     		if (petrinetz.petriElements.get(i) instanceof WFEModelTransition) {
     			WFEModelTransition transition = (WFEModelTransition) petrinetz.petriElements.get(i);
-    			g.fillRect(transition.getPositionx(), transition.getPositiony(), elemsizefactor, elemsizefactor);
+    			if (toModifyElements.size()!=0) {
+    				for (int k = 0; k<toModifyElements.size();k++) {
+    					if (transition.equals(toModifyElements.get(k))) {
+    						g.setColor(Color.RED);
+    						g.fillRect(transition.getPositionx(), transition.getPositiony(), elemsizefactor, elemsizefactor);
+    						g.setColor(Color.BLACK);
+    						g.drawRect(transition.getPositionx(), transition.getPositiony(), elemsizefactor, elemsizefactor);
+    						break;
+    					}
+    					else {
+    						g.fillRect(transition.getPositionx(), transition.getPositiony(), elemsizefactor, elemsizefactor);
+    						//break;
+    					}
+    				}
+    			}
+    			else {
+    				g.fillRect(transition.getPositionx(), transition.getPositiony(), elemsizefactor, elemsizefactor);
+    			}
     		}
     	}
     }
