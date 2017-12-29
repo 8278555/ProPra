@@ -10,7 +10,7 @@ public class Fenstertester {
 
 	public static void main(String[] args) {
 		
-        File pnmlDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Eigene/Beispiel-03.pnml");
+        File pnmlDatei = new File("/home/bibabuzzel/ProPra/Beispiele/Eigene/Beispiel-0003.pnml");
         //File pnmlDatei = new File("C:\\Users\\daniel.brenner\\Documents\\Uni\\2017_2018_ws_aufgabenstellung\\Beispiele\\Beispiel-01.pnml");
         if (pnmlDatei.exists()) {
         	final WFEModelNet petrinetz = new WFEModelNet();

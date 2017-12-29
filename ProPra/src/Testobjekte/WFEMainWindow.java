@@ -31,43 +31,39 @@ public class WFEMainWindow extends JFrame {
     private JScrollPane scroller;
     
 	private static final long serialVersionUID = 1L;
-	private JPanel panel_1;
-	
-	public WFEMainWindow(String title) {
-		setPreferredSize(new Dimension(500, 500));
-		this.setTitle(title);
-		initComponents();
-	}
+	private JPanel scrollpanel;
 	
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public WFEMainWindow(String title, WFEPanel testpanel, WFEModelNet netz) {
-		setPreferredSize(new Dimension(800, 800));
+	
+	
+	public WFEMainWindow(String title) {
+		setPreferredSize(new Dimension(700, 500));
+		this.setTitle(title);		
+		initComponents();
+	}
+	
+	public WFEMainWindow(String title, WFEPanel editpanel, WFEModelNet netz) {
+		setPreferredSize(new Dimension(700, 500));
 		this.setTitle(title);
-		this.panel = testpanel;
-		JPanel scrollbaresPanel = new JPanel();
-		scrollbaresPanel = testpanel;
+		this.panel = editpanel;
 		initComponents();
 		panel.setPreferredSize(new Dimension (500, 500));
-		scroller = new JScrollPane(scrollbaresPanel);
+		scroller = new JScrollPane(editpanel);
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroller.setBounds(50, 30, 300, 50);
         
-		//panel.add(scrollPane);
-        this.getContentPane().add(scroller, BorderLayout.CENTER);
-        scroller.setViewportView(panel);
-        panel.setBackground(Color.BLUE);
-        panel_1 = new JPanel();
-        panel_1.setLayout(new BorderLayout());
-        panel_1.add(testpanel, BorderLayout.CENTER);
-        panel_1.setOpaque(true);
-//        panel_1 = testpanel;
-        scroller.setViewportView(panel_1);
-		this.setContentPane(scroller);
-      //this.add(panel, BorderLayout.CENTER);
-//		scrollPane.add(panel, BorderLayout.CENTER);    
+		this.getContentPane().add(scroller, BorderLayout.CENTER);
+        scroller.add(panel);
+		scroller.setViewportView(panel);
+        
+        scrollpanel = new JPanel();
+        scrollpanel.setLayout(new BorderLayout());
+        scrollpanel.add(editpanel, BorderLayout.CENTER);
+        scrollpanel.setOpaque(true);
+        scroller.setViewportView(scrollpanel);
     }
     
 
@@ -180,9 +176,17 @@ public class WFEMainWindow extends JFrame {
         jMenuBar1.add(jMenuFile);
         jMenuBar1.add(jMenuNet);
         
-        layout = new BorderLayout();       
+        layout = new BorderLayout();
+        
         getContentPane().setLayout(layout);
         getContentPane().add(jMenuBar1, BorderLayout.NORTH);
+        
+        scroller = new JScrollPane();
+        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroller.setBounds(50, 30, 300, 50); 
+        scroller.setOpaque(true);
+    	getContentPane().add(scroller, BorderLayout.CENTER);    	    	
         pack();
     }                        
 
@@ -193,10 +197,11 @@ public class WFEMainWindow extends JFrame {
             this.remove(panel);
             this.validate();
     	};
-        WFEPanel editpanel = new WFEPanel(petrinetz);
-    	panel = editpanel;
-    	editpanel.startnew();
-    	getContentPane().add(editpanel, BorderLayout.CENTER);
+    	panel = new WFEPanel(petrinetz);
+    	panel.startnew();    	
+		panel.setPreferredSize(new Dimension (600, 500));
+        scroller.add(panel);
+		scroller.setViewportView(panel);
     	this.panel.refresh();
     	panel.startnew();
     	this.update(getGraphics());
@@ -217,21 +222,29 @@ public class WFEMainWindow extends JFrame {
             selectedFile = fileChooser.getSelectedFile();
             selectedPath = fileChooser.getCurrentDirectory();
             petrinetz = new WFEModelNet();
+            if (panel != null) {
+            	panel.startnew();
+                remove(panel);
+                revalidate();
+            };
             PNMLParser pnmlParser = new MyPNMLParser(selectedFile, petrinetz);
             pnmlParser.initParser();
             pnmlParser.parse();
-            if (panel != null) {
-                this.remove(panel);
-                this.validate();
-            };
-            WFEPanel editpanel = new WFEPanel(petrinetz);
-        	panel = editpanel;
-        	JScrollPane scroller = new JScrollPane(panel);
-        	//scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            //scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        	setPreferredSize(new Dimension(500, 500));
-        	getContentPane().add(scroller, BorderLayout.CENTER);
+            panel = new WFEPanel(petrinetz);
+        	int maxX = 0;
+        	int maxY = 0;
+        	for (int k = 0; k< petrinetz.getListSize(); k++) {
+        		if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
+        			IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
+        	        if (currElem.getPositionx() > maxX) {maxX = currElem.getPositionx();}
+        	        if (currElem.getPositiony() > maxY) {maxY = currElem.getPositiony();}
+        	    }
+        	}
+        	panel.setPreferredSize(new Dimension ((maxX+40), (maxY+40)));
+            scroller.add(panel);
+            scroller.setViewportView(panel);
         	this.panel.refresh();
+        	this.update(getGraphics());
         	pack();
         }
     }                                       

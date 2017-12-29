@@ -28,7 +28,7 @@ public class WFEPanel extends JPanel {
             
             @Override
             public void mouseReleased(MouseEvent e) {
-            	if(e.getButton() == MouseEvent.BUTTON1) {
+            	if(e.getButton() == MouseEvent.BUTTON1) {            		
             		if (verschiebemodus == false) {
         				for (int k = 0; k< petrinetz.getListSize(); k++) {
                             if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
@@ -49,6 +49,17 @@ public class WFEPanel extends JPanel {
         			ystart = 0;
         			chooseFrameWidth = 0;
         			chooseFrameHeight = 0;
+        			int maxX = 0;
+        			int maxY = 0;
+        			for (int k = 0; k< petrinetz.getListSize(); k++) {
+                        if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
+                        	IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
+                            if (currElem.getPositionx() > maxX) {maxX = currElem.getPositionx();}
+                            if (currElem.getPositiony() > maxY) {maxY = currElem.getPositiony();}
+                        }
+                    }
+        			setPreferredSize(new Dimension ((maxX+elemsizefactor+20), (maxY+elemsizefactor+20)));
+        			revalidate();
         			refresh();
                   }
             }
