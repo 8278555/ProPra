@@ -14,9 +14,11 @@ public class WFEPanel extends JPanel {
     private WFEModelNet petrinetz;
     private int xstart;
     private int ystart;
+    private int xend;
+    private int yend;
     private int elemsizefactor;
     public ArrayList<IPetriElements> toModifyElements = new ArrayList<IPetriElements>();
-
+    private boolean singleelemclicked;
     private boolean verschiebemodus;
     int chooseFrameWidth;
     int chooseFrameHeight;
@@ -28,60 +30,38 @@ public class WFEPanel extends JPanel {
             
             @Override
             public void mouseReleased(MouseEvent e) {
-            	if(e.getButton() == MouseEvent.BUTTON1) {            		
-            		if (verschiebemodus == false) {
-        				for (int k = 0; k< petrinetz.getListSize(); k++) {
-                            if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
-                            	IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
-                                if (xstart <= currElem.getPositionx() && e.getX() >= (currElem.getPositionx()+elemsizefactor)&& ystart <= currElem.getPositiony() && e.getY() >= (currElem.getPositiony()+elemsizefactor)) {
-                                    System.out.println("Nr " + k + ": X: " + currElem.getPositionx() + " Y: " + currElem.getPositiony());
-                                	toModifyElements.add(currElem);
-                                	verschiebemodus = true;
-                                }
-                            }
-                        }
-        			}
-        			else {
-        				verschiebemodus = false;
-        				toModifyElements.clear();
-        			}
-            		xstart = 0;
-        			ystart = 0;
-        			chooseFrameWidth = 0;
-        			chooseFrameHeight = 0;
-        			int maxX = 0;
-        			int maxY = 0;
-        			for (int k = 0; k< petrinetz.getListSize(); k++) {
-                        if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
-                        	IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
-                            if (currElem.getPositionx() > maxX) {maxX = currElem.getPositionx();}
-                            if (currElem.getPositiony() > maxY) {maxY = currElem.getPositiony();}
-                        }
-                    }
-        			setPreferredSize(new Dimension ((maxX+elemsizefactor+20), (maxY+elemsizefactor+20)));
-        			revalidate();
-        			refresh();
-                  }
+            	if(e.getButton() == MouseEvent.BUTTON1) {
+            		panelReleased(petrinetz, e);
+            	}
+            	if(e.getButton() == MouseEvent.BUTTON3) {
+            		refresh();
+            	}
             }
+
+			/**
+			 * @param petrinetz
+			 * @param e
+			 */
             
             @Override
             public void mousePressed(MouseEvent e) {
-                xstart = e.getX();
-                ystart = e.getY();
-                for (int k = 0; k< petrinetz.getListSize(); k++) {
-                    if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
-                        IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
-                        if (xstart >= currElem.getPositionx() && xstart <= (currElem.getPositionx()+elemsizefactor)&& ystart >= currElem.getPositiony() && ystart <= (currElem.getPositiony()+elemsizefactor)) {
-                            if (toModifyElements.isEmpty()) {
-                            	toModifyElements.add(currElem);
-                            }                       	
-                            verschiebemodus = true;
-                            refresh();
-                            break;
-                        }
-                    }
+            	if(e.getButton() == MouseEvent.BUTTON1) {
+            		panelPressed(e, petrinetz);
+            	}
+            	if(e.getButton() == MouseEvent.BUTTON3) {
+            		panelRightButtonMenu(e, petrinetz);
+                    //System.out.println(menu.getNewPlace());
+                	/*JOptionPane.showMessageDialog(null, 
+                              "Rechtsklick",
+                              "MouseButton", 
+                              JOptionPane.PLAIN_MESSAGE);*/
                 }
             }
+
+			/**
+			 * @param e
+			 * @param petrinetz
+			 */
             
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -97,12 +77,7 @@ public class WFEPanel extends JPanel {
                               "MouseButton", 
                               JOptionPane.PLAIN_MESSAGE);
                     }/*/
-                if(e.getButton() == MouseEvent.BUTTON3) {
-                      /*/JOptionPane.showMessageDialog(null, 
-                              "Rechtsklick",
-                              "MouseButton", 
-                              JOptionPane.PLAIN_MESSAGE);/*/
-                }
+                
             }
             @Override
             public void mouseExited(MouseEvent e) {
@@ -117,18 +92,25 @@ public class WFEPanel extends JPanel {
             }
             
  
-        });
+		});
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseMoved(MouseEvent e) {
             }
             @Override
             public void mouseDragged(MouseEvent e) {
-                panelDragged(e);
+            	//if(e.getButton() == MouseEvent.BUTTON1) {
+            	panelDragged(e);
+            	//}
             }
         });
 	}
 
+	public void panelRightButtonMenu(MouseEvent e, WFEModelNet petrinetz) {
+    	RightButtonPopUp menu = new RightButtonPopUp(e, petrinetz, this);
+        menu.show(e.getComponent(), e.getX(), e.getY());
+	}
+	
 	public void setelemsizefactor(int newsize) {
 		elemsizefactor = newsize;
 		refresh();
@@ -141,7 +123,7 @@ public class WFEPanel extends JPanel {
         drawPlace(g);
         drawTransition(g);
         drawArc(g);
-        g.drawRect(xstart, ystart, chooseFrameWidth, chooseFrameHeight);
+        g.drawRect(xend, yend, chooseFrameWidth, chooseFrameHeight);
     }
     
     
@@ -195,7 +177,7 @@ public class WFEPanel extends JPanel {
     		}
     	}
     }
-    
+   
     protected void drawArc(Graphics g) {
         for (int i = 0; i< petrinetz.getListSize(); i++) {
             if (petrinetz.petriElements.get(i) instanceof WFEModelArc) {
@@ -217,12 +199,72 @@ public class WFEPanel extends JPanel {
             }
         }
     }
-    
+
+	private void panelPressed(MouseEvent e, WFEModelNet petrinetz) {
+		xstart = e.getX();
+        ystart = e.getY();
+		xend = e.getX();
+        yend = e.getY();
+        singleelemclicked = false;
+        for (int k = 0; k< petrinetz.getListSize(); k++) {
+            if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
+                IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
+                if (xend >= currElem.getPositionx() && xend <= (currElem.getPositionx()+elemsizefactor)&& yend >= currElem.getPositiony() && yend <= (currElem.getPositiony()+elemsizefactor)) {
+                    if (toModifyElements.isEmpty()) {
+                    	toModifyElements.add(currElem);
+                    }                       	
+                    verschiebemodus = true;
+                    if (toModifyElements.size() == 1) {singleelemclicked = true;}
+                    refresh();
+                    break;
+                }
+            }
+        }
+	}
+
+	private void panelReleased(WFEModelNet petrinetz, MouseEvent e) {
+		if(e.getButton() == MouseEvent.BUTTON1) {
+    		if (verschiebemodus == false) {
+				for (int k = 0; k< petrinetz.getListSize(); k++) {
+                    if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
+                    	IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
+                        if (xend <= currElem.getPositionx() && e.getX() >= (currElem.getPositionx()+elemsizefactor)&& yend <= currElem.getPositiony() && e.getY() >= (currElem.getPositiony()+elemsizefactor)) {
+                            toModifyElements.add(currElem);
+                        	verschiebemodus = true;
+                        }
+                    }
+                }
+			}
+			else if (xstart != e.getX() || ystart != e.getY() || singleelemclicked == false){
+				verschiebemodus = false;
+				toModifyElements.clear();
+			}
+    		xend = 0;
+			yend = 0;
+			chooseFrameWidth = 0;
+			chooseFrameHeight = 0;
+			int maxX = 0;
+			int maxY = 0;
+			// Mindestens benötigtePanelgröße ermitteln 
+			for (int k = 0; k< petrinetz.getListSize(); k++) {
+                if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
+                	IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
+                    if (currElem.getPositionx() > maxX) {maxX = currElem.getPositionx();}
+                    if (currElem.getPositiony() > maxY) {maxY = currElem.getPositiony();}
+                }
+            }
+			// Panelgröße anpassen. Hiermit wird auch das Scrollpanel angepasst.
+			setPreferredSize(new Dimension ((maxX+elemsizefactor+20), (maxY+elemsizefactor+20)));
+			revalidate();
+			refresh();
+          }
+	}
+
     private void panelDragged(MouseEvent e) {
         IPetriNamedElements choosenElem;
         if (toModifyElements.size()==0) {
-        	chooseFrameWidth = e.getX()-xstart;
-        	chooseFrameHeight = e.getY()-ystart;
+        	chooseFrameWidth = e.getX()-xend;
+        	chooseFrameHeight = e.getY()-yend;
         	refresh();
         }
         else {
@@ -232,16 +274,16 @@ public class WFEPanel extends JPanel {
                     if (petrinetz.petriElements.get(l) instanceof IPetriNamedElements) {
                         IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(l);
                         if (currElem.GetID().equals(choosenElem.GetID())) {
-                        	int newx = currElem.getPositionx() + (e.getX() - xstart);
-                        	int newy = currElem.getPositiony() + (e.getY() - ystart);
+                        	int newx = currElem.getPositionx() + (e.getX() - xend);
+                        	int newy = currElem.getPositiony() + (e.getY() - yend);
                         	currElem.setPosition((newx), (newy));
                             refresh();
                         }
                     }
                 }
             }
-        	xstart = e.getX();
-        	ystart = e.getY();
+        	xend = e.getX();
+        	yend = e.getY();
         }    	
     }
     

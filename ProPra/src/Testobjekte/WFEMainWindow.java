@@ -29,8 +29,6 @@ public class WFEMainWindow extends JFrame {
     private File selectedFile;
     private WFEModelNet petrinetz;
     private JScrollPane scroller;
-    
-	private static final long serialVersionUID = 1L;
 	private JPanel scrollpanel;
 	
 	/**
@@ -42,6 +40,19 @@ public class WFEMainWindow extends JFrame {
 		setPreferredSize(new Dimension(700, 500));
 		this.setTitle(title);		
 		initComponents();
+        petrinetz = new WFEModelNet();
+    	if (panel != null) {
+            this.remove(panel);
+            this.validate();
+    	};
+    	panel = new WFEPanel(petrinetz);
+    	panel.startnew();    	
+		panel.setPreferredSize(new Dimension (600, 500));
+        scroller.add(panel);
+		scroller.setViewportView(panel);
+    	this.panel.refresh();
+    	panel.startnew();
+    	this.update(getGraphics());
 	}
 	
 	public WFEMainWindow(String title, WFEPanel editpanel, WFEModelNet netz) {
@@ -129,19 +140,30 @@ public class WFEMainWindow extends JFrame {
 
         jMenuItemNewPlace = new JMenuItem();
         jMenuItemNewPlace.setText("Stelle");
-        /*        jMenuItemNewPlace.addActionListener(new ActionListener() {
+        jMenuItemNewPlace.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent evt) {
         		String newid = JOptionPane.showInputDialog("Bitte die ID der neuen Stellle angeben", "z.B. S1");
-        		int newx = Integer.parseInt(JOptionPane.showInputDialog("Bitte die X-Koordinate der neuen Stellle angeben", "z.B. 75"));
-        		int newy = Integer.parseInt(JOptionPane.showInputDialog("Bitte die Y-Koordinate der neuen Stellle angeben", "z.B. 75"));
+        		int newx = Integer.parseInt(JOptionPane.showInputDialog("Bitte die X-Koordinate der neuen Stelle angeben", "z.B. 75"));
+        		int newy = Integer.parseInt(JOptionPane.showInputDialog("Bitte die Y-Koordinate der neuen Stelle angeben", "z.B. 75"));
         		petrinetz.addPlace(newid);
         		petrinetz.setPosition(newid, Integer.toString(newx), Integer.toString(newy));
         		panel.refresh();
         	}
        });
-*/
+
         jMenuItemNewTransition = new JMenuItem();
         jMenuItemNewTransition.setText("Transition");
+        jMenuItemNewTransition.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		String newid = JOptionPane.showInputDialog("Bitte die ID der neuen Transition angeben", "z.B. T1");
+        		int newx = Integer.parseInt(JOptionPane.showInputDialog("Bitte die X-Koordinate der neuen Transition angeben", "z.B. 75"));
+        		int newy = Integer.parseInt(JOptionPane.showInputDialog("Bitte die Y-Koordinate der neuen Transition angeben", "z.B. 75"));
+        		petrinetz.addTransition(newid);
+        		petrinetz.setPosition(newid, Integer.toString(newx), Integer.toString(newy));
+        		panel.refresh();
+        	}
+       });
+
 
         jMenuItemNewArc = new JMenuItem();
         jMenuItemNewArc.setText("Kante");
@@ -176,17 +198,18 @@ public class WFEMainWindow extends JFrame {
         jMenuBar1.add(jMenuFile);
         jMenuBar1.add(jMenuNet);
         
-        layout = new BorderLayout();
-        
-        getContentPane().setLayout(layout);
-        getContentPane().add(jMenuBar1, BorderLayout.NORTH);
         
         scroller = new JScrollPane();
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroller.setBounds(50, 30, 300, 50); 
         scroller.setOpaque(true);
-    	getContentPane().add(scroller, BorderLayout.CENTER);    	    	
+        
+        layout = new BorderLayout();
+        
+        getContentPane().setLayout(layout);
+        getContentPane().add(jMenuBar1, BorderLayout.NORTH);
+        getContentPane().add(scroller, BorderLayout.CENTER);    	    	
         pack();
     }                        
 
