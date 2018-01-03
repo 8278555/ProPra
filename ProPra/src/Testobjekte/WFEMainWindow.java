@@ -3,7 +3,6 @@ import Release.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -176,7 +175,15 @@ public class WFEMainWindow extends JFrame {
         jMenuItemNetSettings.addActionListener(new ActionListener() {
         	@Override
             public void actionPerformed(ActionEvent evt) {
-        		int sizefactor = Integer.parseInt(JOptionPane.showInputDialog("Bitte gewünschten Größenfaktor angeben", "z.B. 25"));
+        		int sizefactor;
+				try {
+					sizefactor = Integer.parseInt(JOptionPane.showInputDialog("Bitte gewünschten Größenfaktor angeben", "z.B. 25"));
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+					JOptionPane.showMessageDialog(rootPane, "Kein gültiger Wert eingegeben. Bitte einen ganzzahligen Wert eingeben");
+					return;
+				}
         		panel.setelemsizefactor(sizefactor);
         	}
         });
@@ -209,8 +216,8 @@ public class WFEMainWindow extends JFrame {
         
         getContentPane().setLayout(layout);
         getContentPane().add(jMenuBar1, BorderLayout.NORTH);
-        getContentPane().add(scroller, BorderLayout.CENTER);    	    	
-        pack();
+        getContentPane().add(scroller, BorderLayout.CENTER);
+         pack();
     }                        
 
 
