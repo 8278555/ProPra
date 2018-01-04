@@ -2,12 +2,13 @@ package Testobjekte;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import Release.*;
 
-public class WFEPanel extends JPanel /*implements KeyListener*/{
+public class WFEPanel extends JPanel implements IWFESituationView {
 
     private IPetriNamedElements sourcepoint;
     private IPetriNamedElements destpoint;
@@ -18,15 +19,19 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
     private int yend;
     private int elemsizefactor;
     public ArrayList<IPetriElements> toModifyElements = new ArrayList<IPetriElements>();
+    public ArrayList<IArc> markedArcs = new ArrayList<IArc>();
     private boolean singleelemclicked;
     private boolean verschiebemodus;
     private boolean arcAddSrcMode;
     private boolean arcAddDestMode;
+    private boolean newArcDestPlace;
+    private boolean newArcDestTransition;
     private String newSrcId;
     private String newDestId;
     private String newArcId;
     int chooseFrameWidth;
     int chooseFrameHeight;
+    int b1 = MouseEvent.BUTTON1_DOWN_MASK;
     
 	public WFEPanel(WFEModelNet petrinetz) {
 		this.petrinetz = petrinetz;
@@ -105,10 +110,12 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
             }
             @Override
             public void mouseDragged(MouseEvent e) {
-            	panelDragged(e);
+            	if (e.getModifiersEx()==b1) {
+            		panelDragged(e);
+            	}            	
             }
         });
-        //addKeyListener(this);
+        
         this.addKeyListener(new KeyListener() {
         	
  			@Override
@@ -178,7 +185,7 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
 		xend = e.getX();
         yend = e.getY();
         singleelemclicked = false;
-        for (int k = 0; k< petrinetz.getListSize(); k++) {
+        for (int k = 0; k < petrinetz.getListSize(); k++) {
             if (petrinetz.petriElements.get(k) instanceof IPetriNamedElements) {
                 IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
                 if (xend >= currElem.getPositionx() && xend <= (currElem.getPositionx()+elemsizefactor)&& yend >= currElem.getPositiony() && yend <= (currElem.getPositiony()+elemsizefactor)) {
@@ -191,14 +198,34 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
                     break;
                 }
             }
+            else if (petrinetz.petriElements.get(k) instanceof IArc) {
+            	IArc currElem = (IArc) petrinetz.petriElements.get(k);
+            	String arcSrcElemId = currElem.GetSource();
+            	String arcDestElemId = currElem.GetTarget();
+            	int pathStartX = 0;
+            	int pathStartY = 0;
+            	int pathEndX = 0;
+            	int pathEndY = 0;
+            	for (int p = 0; p < petrinetz.getListSize(); p++) {
+            		if (petrinetz.petriElements.get(p) instanceof IPetriNamedElements) {
+            			IPetriNamedElements candidate1 = (IPetriNamedElements) petrinetz.petriElements.get(p);
+            			if (candidate1.GetID().equals(arcSrcElemId)) {
+            				pathStartX = candidate1.getPositionx();
+            				pathStartY = candidate1.getPositiony();
+            			}
+            			else if (candidate1.GetID().equals(arcDestElemId)) {
+            				pathEndX = candidate1.getPositionx();
+            				pathEndY = candidate1.getPositiony();
+            			}
+            		}
+            	}
+            	if (shortestDistance((pathStartX+elemsizefactor/2), (pathStartY+elemsizefactor/2), (pathEndX+elemsizefactor/2), (pathEndY+elemsizefactor/2), e.getX(), e.getY()) < 6) {
+            		markedArcs.add(currElem);
+            	}
+            }
         }
 	}
 
-	public void panelRightButtonMenu(MouseEvent e, WFEModelNet petrinetz) {
-    	RightButtonPopUp menu = new RightButtonPopUp(e, petrinetz, this);
-        menu.show(e.getComponent(), e.getX(), e.getY());
-	}
-	
 	private void panelReleased(WFEModelNet petrinetz, MouseEvent e) {
 		if(e.getButton() == MouseEvent.BUTTON1) {
     		if (verschiebemodus == false) {
@@ -210,11 +237,15 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
                         	verschiebemodus = true;
                         }
                     }
+                    else if (petrinetz.petriElements.get(k) instanceof IArc) {
+                    	IArc currElem = (IArc) petrinetz.petriElements.get(k);
+                    }
                 }
 			}
 			else if (xstart != e.getX() || ystart != e.getY() || singleelemclicked == false){
 				verschiebemodus = false;
 				toModifyElements.clear();
+				markedArcs.clear();
 			}
     		xend = 0;
 			yend = 0;
@@ -237,33 +268,6 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
           }
 	}
 
-    private void panelDragged(MouseEvent e) {
-        IPetriNamedElements choosenElem;
-        if (toModifyElements.size()==0) {
-        	chooseFrameWidth = e.getX()-xend;
-        	chooseFrameHeight = e.getY()-yend;
-        	refresh();
-        }
-        else {
-        	for (int p = 0; p<toModifyElements.size();p++) {
-            	choosenElem = (IPetriNamedElements) toModifyElements.get(p);
-                for (int l = 0; l< petrinetz.getListSize(); l++) {
-                    if (petrinetz.petriElements.get(l) instanceof IPetriNamedElements) {
-                        IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(l);
-                        if (currElem.GetID().equals(choosenElem.GetID())) {
-                        	int newx = currElem.getPositionx() + (e.getX() - xend);
-                        	int newy = currElem.getPositiony() + (e.getY() - yend);
-                        	currElem.setPosition((newx), (newy));
-                            refresh();
-                        }
-                    }
-                }
-            }
-        	xend = e.getX();
-        	yend = e.getY();
-        }    	
-    }
-    
     private void panelClicked(MouseEvent e) {
     	if (arcAddSrcMode == true) {
     		for (int k = 0; k< petrinetz.getListSize(); k++) {
@@ -271,6 +275,14 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
                     IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
                     if ((currElem.getPositionx()<=e.getX())&&(currElem.getPositionx()+elemsizefactor>=e.getX())&&(currElem.getPositiony()<=e.getY())&&(currElem.getPositiony()+elemsizefactor>=e.getY())) {
                     	newSrcId = currElem.GetID();
+                    	if (currElem instanceof IPlace) {
+                    		newArcDestPlace = true;
+                    		newArcDestTransition = false;
+                    	}
+                    	else if (currElem instanceof ITransition) {
+                    		newArcDestTransition = true;
+                    		newArcDestPlace = false;
+                    	}
                     	arcAddSrcMode = false;
                     	arcAddDestMode = true;
                     	break;
@@ -284,10 +296,26 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
                     IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(k);
                     if ((currElem.getPositionx()<=e.getX())&&(currElem.getPositionx()+elemsizefactor>=e.getX())&&(currElem.getPositiony()<=e.getY())&&(currElem.getPositiony()+elemsizefactor>=e.getY())) {
                     	newDestId = currElem.GetID();
-                    	petrinetz.addArc(newArcId, newSrcId, newDestId);
-                    	arcAddDestMode = false;
-                    	refresh();
-                    	break;
+                    	if (((newArcDestPlace == true)&&(currElem instanceof ITransition))||((newArcDestTransition == true)&&(currElem instanceof IPlace))) {
+                    		petrinetz.addArc(newArcId, newSrcId, newDestId);
+                        	arcAddDestMode = false;
+                    		newArcDestTransition = false;
+                    		newArcDestPlace = false;
+                    		toModifyElements.clear();
+                        	refresh();
+                        	break;
+                    	}
+                    	else {
+                    		JOptionPane.showMessageDialog(null, 
+                                    "Eine Kante darf nur von einer Stelle zu einer Transition oder umgekehrt führen",
+                                    "Warnung", 
+                                    JOptionPane.PLAIN_MESSAGE);
+                    		newArcDestTransition = false;
+                    		newArcDestPlace = false;
+                    		arcAddDestMode = false;
+                    		toModifyElements.clear();
+                    		refresh();
+                    	}
                     }
                 }
     		}    
@@ -296,11 +324,78 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
     	else {}
     }
 
+	public void panelRightButtonMenu(MouseEvent e, WFEModelNet petrinetz) {
+    	RightButtonPopUp menu = new RightButtonPopUp(e, petrinetz, this);
+        menu.show(e.getComponent(), e.getX(), e.getY());
+	}
+	
+    private void panelDragged(MouseEvent e) {
+        IPetriNamedElements choosenElem;
+        if (toModifyElements.size()==0) {        
+        	chooseFrameWidth = e.getX()-xend;
+        	chooseFrameHeight = e.getY()-yend;
+        	refresh();
+        }
+        else {
+        	for (int p = 0; p<toModifyElements.size();p++) {
+        		if (toModifyElements.get(p) instanceof IPetriNamedElements) {
+        			choosenElem = (IPetriNamedElements) toModifyElements.get(p);
+                    for (int l = 0; l< petrinetz.getListSize(); l++) {
+                        if (petrinetz.petriElements.get(l) instanceof IPetriNamedElements) {
+                            IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(l);
+                            if (currElem.GetID().equals(choosenElem.GetID())) {
+                            	int newx = currElem.getPositionx() + (e.getX() - xend);
+                            	int newy = currElem.getPositiony() + (e.getY() - yend);
+                            	currElem.setPosition((newx), (newy));
+                                refresh();
+                            }
+                        }
+                    }
+        		}
+            }
+        	xend = e.getX();
+        	yend = e.getY();
+        }    	
+    }
+    
+    private double shortestDistance(int pathStartX, int pathStartY, int pathEndX, int pathEndY, int mouseX, int mouseY) {
+    	  float pw = (float)mouseX - (float)pathStartX;
+    	  float px = (float)mouseY - (float)pathStartY;
+    	  float py = (float)pathEndX - (float)pathStartX;
+    	  float pz = (float)pathEndY - (float)pathStartY;
+
+    	  float dot = pw * py + px * pz;
+    	  float len_sq = py * py + pz * pz;
+    	  float param = -1;
+    	  if (len_sq != 0) //in case of 0 length line
+    	      param = dot / len_sq;
+
+    	  float xx, yy;
+
+    	  if (param < 0) {
+    	    xx = (float)pathStartX;
+    	    yy = (float)pathStartY;
+    	  }
+    	  else if (param > 1) {
+    	    xx = (float)pathEndX;
+    	    yy = (float)pathEndY;
+    	  }
+    	  else {
+    	    xx = (float)pathStartX + param * py;
+    	    yy = (float)pathStartY + param * pz;
+    	  }
+
+    	  float dx = (float)mouseX - xx;
+    	  float dy = (float)mouseY - yy;
+    	  double dist = Math.sqrt(dx * dx + dy * dy);
+    	  System.out.println(dist);
+    	  return dist;
+    }
+
     private void deleteElements(KeyEvent e) {
-    	IPetriNamedElements choosenElem;
     	if (e.getKeyCode()==127) {
     		for (int p = 0; p<toModifyElements.size();p++) {
-            	choosenElem = (IPetriNamedElements) toModifyElements.get(p);
+    			IPetriNamedElements choosenElem = (IPetriNamedElements) toModifyElements.get(p);
                 for (int l = 0; l< petrinetz.getListSize(); l++) {
                     if (petrinetz.petriElements.get(l) instanceof IPetriNamedElements) {
                         IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(l);
@@ -320,6 +415,18 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
                     }
                 }
             }
+    		for (int p = 0; p<markedArcs.size();p++) {
+    			IArc choosenElem = markedArcs.get(p);
+    			for (int l = 0; l< petrinetz.getListSize(); l++) {
+    				if (petrinetz.petriElements.get(l) instanceof IArc) {
+    					IArc currElem = (IArc) petrinetz.petriElements.get(l);
+    					if (currElem.GetID().equals(choosenElem.GetID())) {
+    						petrinetz.petriElements.remove(l);
+    						refresh();
+    					}
+    				}
+    			}
+    		}
     	}
     		
     }
@@ -364,7 +471,6 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
     					}
     					else {
     						g.fillRect(transition.getPositionx(), transition.getPositiony(), elemsizefactor, elemsizefactor);
-    						//break;
     					}
     				}
     			}
@@ -389,9 +495,30 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
                         }
                     }
                 }
-                g.drawLine((sourcepoint.getPositionx()+elemsizefactor/2), (sourcepoint.getPositiony()+elemsizefactor/2), (destpoint.getPositionx()+elemsizefactor/2), (destpoint.getPositiony()+elemsizefactor/2));
-                Pfeildreieck d = new Pfeildreieck((sourcepoint.getPositionx()+elemsizefactor/2), (sourcepoint.getPositiony()+elemsizefactor/2), (destpoint.getPositionx()+elemsizefactor/2), (destpoint.getPositiony()+elemsizefactor/2), elemsizefactor);
-                g.fillPolygon(d.Pfeilspitze());           
+                if (markedArcs.size()!=0) {
+                	for (int k = 0; k<markedArcs.size();k++) {
+                		if (kante.equals(markedArcs.get(k))) {
+                			g.setColor(Color.RED);
+                			g.drawLine((sourcepoint.getPositionx()+elemsizefactor/2), (sourcepoint.getPositiony()+elemsizefactor/2), (destpoint.getPositionx()+elemsizefactor/2), (destpoint.getPositiony()+elemsizefactor/2));
+                            Pfeildreieck d = new Pfeildreieck((sourcepoint.getPositionx()+elemsizefactor/2), (sourcepoint.getPositiony()+elemsizefactor/2), (destpoint.getPositionx()+elemsizefactor/2), (destpoint.getPositiony()+elemsizefactor/2), elemsizefactor);
+                            g.fillPolygon(d.Pfeilspitze());
+                            g.setColor(Color.BLACK);
+                            g.drawPolygon(d.Pfeilspitze());
+                            break;
+                		}
+                		else {
+                            g.drawLine((sourcepoint.getPositionx()+elemsizefactor/2), (sourcepoint.getPositiony()+elemsizefactor/2), (destpoint.getPositionx()+elemsizefactor/2), (destpoint.getPositiony()+elemsizefactor/2));
+                            Pfeildreieck d = new Pfeildreieck((sourcepoint.getPositionx()+elemsizefactor/2), (sourcepoint.getPositiony()+elemsizefactor/2), (destpoint.getPositionx()+elemsizefactor/2), (destpoint.getPositiony()+elemsizefactor/2), elemsizefactor);
+                            g.fillPolygon(d.Pfeilspitze());           
+
+                		}
+                	}
+                }
+                else {
+                	g.drawLine((sourcepoint.getPositionx()+elemsizefactor/2), (sourcepoint.getPositiony()+elemsizefactor/2), (destpoint.getPositionx()+elemsizefactor/2), (destpoint.getPositiony()+elemsizefactor/2));
+                    Pfeildreieck d = new Pfeildreieck((sourcepoint.getPositionx()+elemsizefactor/2), (sourcepoint.getPositiony()+elemsizefactor/2), (destpoint.getPositionx()+elemsizefactor/2), (destpoint.getPositiony()+elemsizefactor/2), elemsizefactor);
+                    g.fillPolygon(d.Pfeilspitze());
+                }
             }
         }
     }
@@ -415,7 +542,5 @@ public class WFEPanel extends JPanel /*implements KeyListener*/{
         drawArc(g);
         g.drawRect(xend, yend, chooseFrameWidth, chooseFrameHeight);
     }
-
-	
-    
+	    
 }
