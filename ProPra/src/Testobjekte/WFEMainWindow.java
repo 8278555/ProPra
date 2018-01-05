@@ -142,8 +142,18 @@ public class WFEMainWindow extends JFrame {
         jMenuItemNewPlace.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent evt) {
         		String newid = JOptionPane.showInputDialog("Bitte die ID der neuen Stellle angeben", "z.B. S1");
-        		int newx = Integer.parseInt(JOptionPane.showInputDialog("Bitte die X-Koordinate der neuen Stelle angeben", "z.B. 75"));
-        		int newy = Integer.parseInt(JOptionPane.showInputDialog("Bitte die Y-Koordinate der neuen Stelle angeben", "z.B. 75"));
+				if (newid == null) {
+					return;
+					}
+        		int newx;
+        		int newy;
+        		try {
+					newx = Integer.parseInt(JOptionPane.showInputDialog("Bitte die X-Koordinate der neuen Stelle angeben", "z.B. 75"));
+					newy = Integer.parseInt(JOptionPane.showInputDialog("Bitte die Y-Koordinate der neuen Stelle angeben", "z.B. 75"));
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(rootPane, "Kein gültiger Wert eingegeben. Bitte einen ganzzahligen Wert eingeben");
+					return;
+				}
         		petrinetz.addPlace(newid);
         		petrinetz.setPosition(newid, Integer.toString(newx), Integer.toString(newy));
         		panel.refresh();
@@ -155,8 +165,15 @@ public class WFEMainWindow extends JFrame {
         jMenuItemNewTransition.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent evt) {
         		String newid = JOptionPane.showInputDialog("Bitte die ID der neuen Transition angeben", "z.B. T1");
-        		int newx = Integer.parseInt(JOptionPane.showInputDialog("Bitte die X-Koordinate der neuen Transition angeben", "z.B. 75"));
-        		int newy = Integer.parseInt(JOptionPane.showInputDialog("Bitte die Y-Koordinate der neuen Transition angeben", "z.B. 75"));
+        		int newx;
+				int newy;
+				try {
+					newx = Integer.parseInt(JOptionPane.showInputDialog("Bitte die X-Koordinate der neuen Transition angeben", "z.B. 75"));
+					newy = Integer.parseInt(JOptionPane.showInputDialog("Bitte die Y-Koordinate der neuen Transition angeben", "z.B. 75"));
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(rootPane, "Kein gültiger Wert eingegeben. Bitte einen ganzzahligen Wert eingeben");
+					return;
+				}
         		petrinetz.addTransition(newid);
         		petrinetz.setPosition(newid, Integer.toString(newx), Integer.toString(newy));
         		panel.refresh();
@@ -166,6 +183,51 @@ public class WFEMainWindow extends JFrame {
 
         jMenuItemNewArc = new JMenuItem();
         jMenuItemNewArc.setText("Kante");
+        jMenuItemNewArc.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (petrinetz.getListSize()<2) {
+					JOptionPane.showMessageDialog(rootPane, "Zu wenig Elemente für eine Kante vorhanden!!!", "Warnung", JOptionPane.PLAIN_MESSAGE);
+					return;
+				}
+				String newid = JOptionPane.showInputDialog("Bitte die ID der neuen Kante angeben", "z.B. K1");
+				String srcid = JOptionPane.showInputDialog("Bitte die ID des SourceElements angeben", "");
+				String destid = JOptionPane.showInputDialog("Bitte die ID des DestinationElements angeben", "");
+				if (srcid.equals(destid)) {
+					JOptionPane.showMessageDialog(rootPane, "Eine Kante darf nur von einer Stelle zu einer Transition oder umgekehrt führen", "Warnung", JOptionPane.PLAIN_MESSAGE);
+					return;
+				}
+				boolean placevalid = false;
+				boolean transitionvalid = false;
+				for (int k = 0; k < petrinetz.getListSize(); k++) {
+					if (petrinetz.petriElements.get(k) instanceof IPlace) {
+	                    IPlace currElem = (IPlace) petrinetz.petriElements.get(k);
+	                    if (currElem.GetID().equals(srcid)||currElem.GetID().equals(destid)){
+	                    	if (placevalid == false) {placevalid = true;}
+	                    }
+	                    else {
+	                    	JOptionPane.showMessageDialog(rootPane, "Eine Kante darf nur von einer Stelle zu einer Transition oder umgekehrt führen", "Warnung", JOptionPane.PLAIN_MESSAGE);
+	                    	break;
+	                    }
+					}
+					else if (petrinetz.petriElements.get(k) instanceof ITransition) {
+	                    ITransition currElem = (ITransition) petrinetz.petriElements.get(k);
+	                    if (currElem.GetID().equals(srcid)||currElem.GetID().equals(destid)){
+	                    	if (transitionvalid == false) {transitionvalid = true;}
+	                    }
+	                    else {
+	                    	JOptionPane.showMessageDialog(rootPane, "Eine Kante darf nur von einer Stelle zu einer Transition oder umgekehrt führen", "Warnung", JOptionPane.PLAIN_MESSAGE);
+	                    	break;
+	                    }
+
+					}
+				}
+				petrinetz.addArc(newid, srcid, destid);
+				panel.refresh();
+			}
+		});
 
         jMenuItemNetTestRun = new JMenuItem();
         jMenuItemNetTestRun.setText("Testlauf");
@@ -179,12 +241,10 @@ public class WFEMainWindow extends JFrame {
 				try {
 					sizefactor = Integer.parseInt(JOptionPane.showInputDialog("Bitte gewünschten Größenfaktor angeben", "z.B. 25"));
 				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
 					JOptionPane.showMessageDialog(rootPane, "Kein gültiger Wert eingegeben. Bitte einen ganzzahligen Wert eingeben");
 					return;
 				}
-        		panel.setelemsizefactor(sizefactor);
+        		panel.setElemsizefactor(sizefactor);
         	}
         });
         

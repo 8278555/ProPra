@@ -2,7 +2,6 @@ package Testobjekte;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -31,7 +30,7 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     private String newArcId;
     int chooseFrameWidth;
     int chooseFrameHeight;
-    int b1 = MouseEvent.BUTTON1_DOWN_MASK;
+    private int b1 = MouseEvent.BUTTON1_DOWN_MASK;
     
 	public WFEPanel(WFEModelNet petrinetz) {
 		this.petrinetz = petrinetz;
@@ -121,7 +120,7 @@ public class WFEPanel extends JPanel implements IWFESituationView {
  			@Override
  			public void keyTyped(KeyEvent e) {
  				// TODO Auto-generated method stub
- 				
+ 				 	
  			}
  			
  			@Override
@@ -174,11 +173,15 @@ public class WFEPanel extends JPanel implements IWFESituationView {
 		this.newArcId = newArcId;
 	}
 
-	public void setelemsizefactor(int newsize) {
+	public void setElemsizefactor(int newsize) {
 		elemsizefactor = newsize;
 		refresh();
 	}
 	
+	public int getElemsizefactor() {
+		return elemsizefactor;
+	}
+
 	private void panelPressed(MouseEvent e, WFEModelNet petrinetz) {
 		xstart = e.getX();
         ystart = e.getY();
@@ -238,7 +241,7 @@ public class WFEPanel extends JPanel implements IWFESituationView {
                         }
                     }
                     else if (petrinetz.petriElements.get(k) instanceof IArc) {
-                    	IArc currElem = (IArc) petrinetz.petriElements.get(k);
+                    	//IArc currElem = (IArc) petrinetz.petriElements.get(k);
                     }
                 }
 			}
@@ -388,7 +391,6 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     	  float dx = (float)mouseX - xx;
     	  float dy = (float)mouseY - yy;
     	  double dist = Math.sqrt(dx * dx + dy * dy);
-    	  System.out.println(dist);
     	  return dist;
     }
 
@@ -442,16 +444,25 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     						g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
     						g.setColor(Color.BLACK);
     						g.drawOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+    	    				if (stelle.getName() != null) {
+    	        				g.drawString(stelle.getName(), stelle.getPositionx(), stelle.getPositiony()+elemsizefactor+15);
+    	    				}
     						break;
     					}
     					else {
     						g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+    	    				if (stelle.getName() != null) {
+    	        				g.drawString(stelle.getName(), stelle.getPositionx(), stelle.getPositiony()+elemsizefactor+15);
+    	    				}
     						//break;
     					}
     				}
     			}
     			else {
     				g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+    				if (stelle.getName() != null) {
+        				g.drawString(stelle.getName(), stelle.getPositionx(), stelle.getPositiony()+elemsizefactor+15);
+    				}
     			}
     		}
     	}
@@ -467,15 +478,25 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     						g.fillRect(transition.getPositionx(), transition.getPositiony(), elemsizefactor, elemsizefactor);
     						g.setColor(Color.BLACK);
     						g.drawRect(transition.getPositionx(), transition.getPositiony(), elemsizefactor, elemsizefactor);
+    	    				if (transition.getName() != null) {
+    	        				g.drawString(transition.getName(), transition.getPositionx(), transition.getPositiony()+elemsizefactor+15);
+    	    				}
+
     						break;
     					}
     					else {
     						g.fillRect(transition.getPositionx(), transition.getPositiony(), elemsizefactor, elemsizefactor);
+    	    				if (transition.getName() != null) {
+    	        				g.drawString(transition.getName(), transition.getPositionx(), transition.getPositiony()+elemsizefactor+15);
+    	    				}
     					}
     				}
     			}
     			else {
     				g.fillRect(transition.getPositionx(), transition.getPositiony(), elemsizefactor, elemsizefactor);
+    				if (transition.getName() != null) {
+        				g.drawString(transition.getName(), transition.getPositionx(), transition.getPositiony()+elemsizefactor+15);
+    				}
     			}
     		}
     	}
@@ -537,9 +558,9 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        drawArc(g);
         drawPlace(g);
         drawTransition(g);
-        drawArc(g);
         g.drawRect(xend, yend, chooseFrameWidth, chooseFrameHeight);
     }
 	    
