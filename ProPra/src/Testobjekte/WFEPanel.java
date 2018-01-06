@@ -31,10 +31,14 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     int chooseFrameWidth;
     int chooseFrameHeight;
     private int b1 = MouseEvent.BUTTON1_DOWN_MASK;
+    private String invalidReasonMessage;
+    private NetzTester Validator;
+    
     
 	public WFEPanel(WFEModelNet petrinetz) {
 		this.petrinetz = petrinetz;
 		elemsizefactor = 20;
+		Validator = new NetzTester();
 		this.addMouseListener(new MouseListener() {
             
             @Override
@@ -180,6 +184,20 @@ public class WFEPanel extends JPanel implements IWFESituationView {
 	
 	public int getElemsizefactor() {
 		return elemsizefactor;
+	}
+
+	/**
+	 * @return the invalidReasonMessage
+	 */
+	public String getInvalidReasonMessage() {
+		return invalidReasonMessage;
+	}
+
+	/**
+	 * @param invalidReasonMessage the invalidReasonMessage to set
+	 */
+	public void setInvalidReasonMessage(String invalidReasonMessage) {
+		this.invalidReasonMessage = invalidReasonMessage;
 	}
 
 	private void panelPressed(MouseEvent e, WFEModelNet petrinetz) {
@@ -552,7 +570,10 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     }
     
     public void refresh() {
-        repaint();
+    	if (petrinetz.getListSize()>0) {
+    		boolean valid = Validator.isValidNet(petrinetz, this);
+    	}
+    	repaint();
     }
     
     @Override
@@ -562,6 +583,9 @@ public class WFEPanel extends JPanel implements IWFESituationView {
         drawPlace(g);
         drawTransition(g);
         g.drawRect(xend, yend, chooseFrameWidth, chooseFrameHeight);
+        if (invalidReasonMessage != null) {
+        	g.drawString(invalidReasonMessage, 10, 10);
+        }
     }
 	    
 }

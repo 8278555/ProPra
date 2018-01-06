@@ -1,7 +1,10 @@
 package Release;
 
+import java.util.ArrayList;
+
 public interface IWFEModelNet {
 	
+	ArrayList<IPetriElements> petriElements = null;
 	public int getListSize();
 	public void addTransition(String id);
 	public void addPlace(String id);

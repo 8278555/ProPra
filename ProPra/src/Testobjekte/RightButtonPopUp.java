@@ -13,6 +13,7 @@ public class RightButtonPopUp extends JPopupMenu {
     private JMenuItem jMenuItemNewPlace;
     private JMenuItem jMenuItemNewTransition;
     private JMenuItem jMenuChangePlaceName;
+    private JMenuItem jMenuChangePlaceMarking;
     private JMenuItem jMenuChangeTransitionName;
     private JMenuItem jMenuItemNewArc;
 
@@ -53,6 +54,27 @@ public class RightButtonPopUp extends JPopupMenu {
 					}
 				}
 				
+			}
+		});
+		jMenuChangePlaceMarking = new JMenuItem("Markierung ändern");
+		jMenuChangePlaceMarking.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				for (int i = 0; i < petrinetz.getListSize();i++) {
+					if (petrinetz.petriElements.get(i) instanceof IPlace) {
+						IPlace stelle = (IPlace) petrinetz.petriElements.get(i);
+						if (f.getX() >= stelle.getPositionx() && f.getY() <= (stelle.getPositionx()+panel.getElemsizefactor())&& f.getY() >= stelle.getPositiony() && f.getY() <= (stelle.getPositiony()+panel.getElemsizefactor())) {
+							String newMark = JOptionPane.showInputDialog("Bitte die neue Markierung der Stelle angeben", stelle.GetToken()); 
+							if (newMark!=null) {
+								stelle.SetToken(newMark);
+								panel.refresh();
+							};
+							
+						}
+					}
+				}
 			}
 		});
 		jMenuItemNewTransition = new JMenuItem("Neue Transition");
@@ -111,6 +133,7 @@ public class RightButtonPopUp extends JPopupMenu {
 				IPlace stelle = (IPlace) petrinetz.petriElements.get(i);
 				if ((f.getX() >= stelle.getPositionx()) && (f.getX() <= (stelle.getPositionx()+panel.getElemsizefactor())) && ( f.getY() >= stelle.getPositiony()) && (f.getY() <= (stelle.getPositiony()+panel.getElemsizefactor()))) {
 					jMenuPlace.add(jMenuChangePlaceName);
+					jMenuPlace.add(jMenuChangePlaceMarking);
 				}
 			}
 		}
