@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class WFEModelNet implements IWFEModelNet{
 	IArc kante;
-	IPetriNamedElements transition;
+	ITransition transition;
 	IPlace stelle;
 	public ArrayList<IPetriElements> petriElements;
 	String filename;
@@ -19,7 +19,6 @@ public class WFEModelNet implements IWFEModelNet{
 		
 	public void addTransition(String id) {
 		transition = new WFEModelTransition(id);
-		transition.SetID(id);
 		petriElements.add(transition);
 		}
 		

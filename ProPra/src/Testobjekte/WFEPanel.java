@@ -33,6 +33,8 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     private int b1 = MouseEvent.BUTTON1_DOWN_MASK;
     private String invalidReasonMessage;
     private NetzTester Validator;
+    private String startPlace;
+    private String endPlace;
     
     
 	public WFEPanel(WFEModelNet petrinetz) {
@@ -198,6 +200,34 @@ public class WFEPanel extends JPanel implements IWFESituationView {
 	 */
 	public void setInvalidReasonMessage(String invalidReasonMessage) {
 		this.invalidReasonMessage = invalidReasonMessage;
+	}
+
+	/**
+	 * @return the startPlace
+	 */
+	public String getStartPlace() {
+		return startPlace;
+	}
+
+	/**
+	 * @param startPlace the startPlace to set
+	 */
+	public void setStartPlace(String startPlace) {
+		this.startPlace = startPlace;
+	}
+
+	/**
+	 * @return the endPlace
+	 */
+	public String getEndPlace() {
+		return endPlace;
+	}
+
+	/**
+	 * @param endPlace the endPlace to set
+	 */
+	public void setEndPlace(String endPlace) {
+		this.endPlace = endPlace;
 	}
 
 	private void panelPressed(MouseEvent e, WFEModelNet petrinetz) {
@@ -467,6 +497,17 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     	    				}
     						break;
     					}
+    					else if ((stelle.GetID().equals(startPlace))||(stelle.GetID().equals(endPlace))) {
+    						g.setColor(Color.ORANGE);
+    						g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+    						g.setColor(Color.BLACK);
+    						g.drawOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+    						if (stelle.GetID().equals(startPlace)) {g.drawString("Marke: "+stelle.GetToken(), stelle.getPositionx()+elemsizefactor+15, stelle.getPositiony());}
+    	    				if (stelle.getName() != null) {
+    	        				g.drawString(stelle.getName(), stelle.getPositionx(), stelle.getPositiony()+elemsizefactor+15);
+    	    				}
+    						break;
+    					}
     					else {
     						g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
     	    				if (stelle.getName() != null) {
@@ -476,6 +517,17 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     					}
     				}
     			}
+    			else if ((stelle.GetID().equals(startPlace))||(stelle.GetID().equals(endPlace))) {
+					g.setColor(Color.ORANGE);
+					g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+					g.setColor(Color.BLACK);
+					g.drawOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
+					if (stelle.GetID().equals(startPlace)) {g.drawString("Marke: "+stelle.GetToken(), stelle.getPositionx()+elemsizefactor+15, stelle.getPositiony());}
+    				if (stelle.getName() != null) {
+        				g.drawString(stelle.getName(), stelle.getPositionx(), stelle.getPositiony()+elemsizefactor+15);
+    				}
+					//break;
+				}
     			else {
     				g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
     				if (stelle.getName() != null) {
@@ -571,7 +623,7 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     
     public void refresh() {
     	if (petrinetz.getListSize()>0) {
-    		boolean valid = Validator.isValidNet(petrinetz, this);
+    		Validator.isValidNet(petrinetz, this);
     	}
     	repaint();
     }

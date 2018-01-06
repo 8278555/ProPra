@@ -16,8 +16,10 @@ public class RightButtonPopUp extends JPopupMenu {
     private JMenuItem jMenuChangePlaceMarking;
     private JMenuItem jMenuChangeTransitionName;
     private JMenuItem jMenuItemNewArc;
+    private MouseEvent evt;
 
 	public RightButtonPopUp(MouseEvent f, WFEModelNet petrinetz, WFEPanel panel) {
+		this.evt = f;
 		jMenuPlace = new JMenu("Stelle");
 		jMenuTransition = new JMenu("Transition");
 		jMenuArc = new JMenu("Kante");
@@ -29,8 +31,8 @@ public class RightButtonPopUp extends JPopupMenu {
 				if (newid == null) {
 					return;
 					}
-				int newx = f.getX();
-				int newy = f.getY();
+				int newx = evt.getX();
+				int newy = evt.getY();
 				petrinetz.addPlace(newid);
 				petrinetz.setPosition(newid, Integer.toString(newx), Integer.toString(newy));
 				panel.refresh();
@@ -43,7 +45,7 @@ public class RightButtonPopUp extends JPopupMenu {
 				for (int i = 0; i < petrinetz.getListSize();i++) {
 					if (petrinetz.petriElements.get(i) instanceof IPlace) {
 						IPlace stelle = (IPlace) petrinetz.petriElements.get(i);
-						if (f.getX() >= stelle.getPositionx() && f.getY() <= (stelle.getPositionx()+panel.getElemsizefactor())&& f.getY() >= stelle.getPositiony() && f.getY() <= (stelle.getPositiony()+panel.getElemsizefactor())) {
+						if (evt.getX() >= stelle.getPositionx() && evt.getX() <= (stelle.getPositionx()+panel.getElemsizefactor())&& evt.getY() >= stelle.getPositiony() && evt.getY() <= (stelle.getPositiony()+panel.getElemsizefactor())) {
 							String newname = JOptionPane.showInputDialog("Bitte den neuen Namen der Stelle angeben", "z.B. Stelle 1"); 
 							if (newname!=null) {
 								stelle.setName(newname);
@@ -58,14 +60,13 @@ public class RightButtonPopUp extends JPopupMenu {
 		});
 		jMenuChangePlaceMarking = new JMenuItem("Markierung ändern");
 		jMenuChangePlaceMarking.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				for (int i = 0; i < petrinetz.getListSize();i++) {
 					if (petrinetz.petriElements.get(i) instanceof IPlace) {
 						IPlace stelle = (IPlace) petrinetz.petriElements.get(i);
-						if (f.getX() >= stelle.getPositionx() && f.getY() <= (stelle.getPositionx()+panel.getElemsizefactor())&& f.getY() >= stelle.getPositiony() && f.getY() <= (stelle.getPositiony()+panel.getElemsizefactor())) {
+						if (evt.getX() >= stelle.getPositionx() && evt.getX() <= (stelle.getPositionx()+panel.getElemsizefactor())&& evt.getY() >= stelle.getPositiony() && evt.getY() <= (stelle.getPositiony()+panel.getElemsizefactor())) {
 							String newMark = JOptionPane.showInputDialog("Bitte die neue Markierung der Stelle angeben", stelle.GetToken()); 
 							if (newMark!=null) {
 								stelle.SetToken(newMark);
@@ -85,8 +86,8 @@ public class RightButtonPopUp extends JPopupMenu {
 				if (newid == null) {
 					return;
 					}
-				int newx = f.getX();
-				int newy = f.getY();
+				int newx = evt.getX();
+				int newy = evt.getY();
 				petrinetz.addTransition(newid);
 				petrinetz.setPosition(newid, Integer.toString(newx), Integer.toString(newy));
 				panel.refresh();
@@ -99,7 +100,7 @@ public class RightButtonPopUp extends JPopupMenu {
 				for (int i = 0; i < petrinetz.getListSize();i++) {
 					if (petrinetz.petriElements.get(i) instanceof ITransition) {
 						ITransition stelle = (ITransition) petrinetz.petriElements.get(i);
-						if (f.getX() >= stelle.getPositionx() && f.getY() <= (stelle.getPositionx()+panel.getElemsizefactor())&& f.getY() >= stelle.getPositiony() && f.getY() <= (stelle.getPositiony()+panel.getElemsizefactor())) {
+						if (evt.getX() >= stelle.getPositionx() && evt.getX() <= (stelle.getPositionx()+panel.getElemsizefactor())&& evt.getY() >= stelle.getPositiony() && evt.getY() <= (stelle.getPositiony()+panel.getElemsizefactor())) {
 							String newname = JOptionPane.showInputDialog("Bitte den neuen Namen der Transition angeben", "z.B. Transition 1"); 
 							if (newname!=null) {
 								stelle.setName(newname);
@@ -131,7 +132,7 @@ public class RightButtonPopUp extends JPopupMenu {
 		for (int i = 0; i < petrinetz.getListSize();i++) {
 			if (petrinetz.petriElements.get(i) instanceof IPlace) {
 				IPlace stelle = (IPlace) petrinetz.petriElements.get(i);
-				if ((f.getX() >= stelle.getPositionx()) && (f.getX() <= (stelle.getPositionx()+panel.getElemsizefactor())) && ( f.getY() >= stelle.getPositiony()) && (f.getY() <= (stelle.getPositiony()+panel.getElemsizefactor()))) {
+				if ((evt.getX() >= stelle.getPositionx()) && (evt.getX() <= (stelle.getPositionx()+panel.getElemsizefactor())) && ( evt.getY() >= stelle.getPositiony()) && (evt.getY() <= (stelle.getPositiony()+panel.getElemsizefactor()))) {
 					jMenuPlace.add(jMenuChangePlaceName);
 					jMenuPlace.add(jMenuChangePlaceMarking);
 				}
@@ -142,7 +143,7 @@ public class RightButtonPopUp extends JPopupMenu {
 		for (int i = 0; i < petrinetz.getListSize();i++) {
 			if (petrinetz.petriElements.get(i) instanceof ITransition) {
 				ITransition stelle = (ITransition) petrinetz.petriElements.get(i);
-				if ((f.getX() >= stelle.getPositionx()) && (f.getX() <= (stelle.getPositionx()+panel.getElemsizefactor())) && ( f.getY() >= stelle.getPositiony()) && (f.getY() <= (stelle.getPositiony()+panel.getElemsizefactor()))) {
+				if ((evt.getX() >= stelle.getPositionx()) && (evt.getX() <= (stelle.getPositionx()+panel.getElemsizefactor())) && ( evt.getY() >= stelle.getPositiony()) && (evt.getY() <= (stelle.getPositiony()+panel.getElemsizefactor()))) {
 					jMenuTransition.add(jMenuChangeTransitionName);
 				}
 			}

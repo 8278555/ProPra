@@ -7,7 +7,7 @@ public class MyPNMLParser extends PNMLParser{
     /**
      * Dies ist eine Referenz zum Java Datei Objekt.
      */
-    private File pnmlDatei;
+    protected File pnmlDatei;
     WFEModelNet petrinetz;
     
     /**

@@ -4,7 +4,7 @@ public class WFEModelValue {
     String wert;
     
     public WFEModelValue(){
-    	this.wert = "0";
+    	this.wert = "";
     }
     
     public void setvalue(String value) {
