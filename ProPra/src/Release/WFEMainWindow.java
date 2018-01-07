@@ -1,5 +1,6 @@
-package Testobjekte;
-import Release.*;
+package Release;
+import Testobjekte.WFETestrunPanel;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -23,17 +24,13 @@ public class WFEMainWindow extends JFrame {
     private JMenuItem jMenuItemNetTestRun;
     private JMenuItem jMenuItemNetSettings;
     private WFEPanel panel;
+    private WFETestrunPanel testlauf;
     private BorderLayout layout;
     private File selectedPath;
     private File selectedFile;
     private WFEModelNet petrinetz;
     private JScrollPane scroller;
-	private JPanel scrollpanel;
-	
-	/**
-	 * @wbp.parser.constructor
-	 */
-	
+	private boolean testActive;
 	
 	public WFEMainWindow(String title) {
 		setPreferredSize(new Dimension(700, 500));
@@ -45,9 +42,11 @@ public class WFEMainWindow extends JFrame {
             this.validate();
     	};
     	panel = new WFEPanel(petrinetz);
+    	testlauf = new WFETestrunPanel(petrinetz);
     	panel.startnew();    	
 		panel.setPreferredSize(new Dimension (600, 500));
-        scroller.add(panel);
+		        scroller.add(panel);
+        scroller.add(testlauf);
 		scroller.setViewportView(panel);
     	this.panel.refresh();
     	panel.startnew();
@@ -58,22 +57,14 @@ public class WFEMainWindow extends JFrame {
 		setPreferredSize(new Dimension(700, 500));
 		this.setTitle(title);
 		this.panel = editpanel;
+		testlauf = new WFETestrunPanel(petrinetz);
 		initComponents();
 		panel.setPreferredSize(new Dimension (500, 500));
-		scroller = new JScrollPane(editpanel);
-        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scroller.setBounds(50, 30, 300, 50);
-        
-		this.getContentPane().add(scroller, BorderLayout.CENTER);
         scroller.add(panel);
+        scroller.add(testlauf);
 		scroller.setViewportView(panel);
-        
-        scrollpanel = new JPanel();
-        scrollpanel.setLayout(new BorderLayout());
-        scrollpanel.add(editpanel, BorderLayout.CENTER);
-        scrollpanel.setOpaque(true);
-        scroller.setViewportView(scrollpanel);
+        panel.refresh();
+        update(getGraphics());
     }
     
 
@@ -230,7 +221,36 @@ public class WFEMainWindow extends JFrame {
 		});
 
         jMenuItemNetTestRun = new JMenuItem();
-        jMenuItemNetTestRun.setText("Testlauf");
+        jMenuItemNetTestRun.setText("Testlauf starten");
+        jMenuItemNetTestRun.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (testActive != true) {
+					if (panel.isNetValid()==true) {
+						testActive = true;
+						jMenuItemNetTestRun.setText("Bearbeitung fortsetzen");
+						if (testlauf != null) {
+							remove(testlauf);
+						}
+						testlauf = new WFETestrunPanel(petrinetz);
+						testlauf.setStartPlace(panel.getStartPlace());
+						testlauf.setEndPlace(panel.getEndPlace());
+						testlauf.refresh();
+						scroller.setViewportView(testlauf);
+
+					}
+					else {
+						JOptionPane.showMessageDialog(rootPane, "Kein gültiges Netz, Testlauf nicht möglich");
+					}
+				}
+				else {
+					testActive = false;
+					scroller.setViewportView(panel);
+					jMenuItemNetTestRun.setText("Testlauf starten");
+				}				
+			}
+		});
         
         jMenuItemNetSettings = new JMenuItem();
         jMenuItemNetSettings.setText("Einstellungen");
@@ -288,9 +308,11 @@ public class WFEMainWindow extends JFrame {
             this.validate();
     	};
     	panel = new WFEPanel(petrinetz);
+    	testlauf = new WFETestrunPanel(petrinetz);
     	panel.startnew();    	
 		panel.setPreferredSize(new Dimension (600, 500));
         scroller.add(panel);
+        scroller.add(testlauf);
 		scroller.setViewportView(panel);
     	this.panel.refresh();
     	panel.startnew();
@@ -321,6 +343,7 @@ public class WFEMainWindow extends JFrame {
             pnmlParser.initParser();
             pnmlParser.parse();
             panel = new WFEPanel(petrinetz);
+            testlauf = new WFETestrunPanel(petrinetz);
         	int maxX = 0;
         	int maxY = 0;
         	for (int k = 0; k< petrinetz.getListSize(); k++) {
@@ -332,6 +355,7 @@ public class WFEMainWindow extends JFrame {
         	}
         	panel.setPreferredSize(new Dimension ((maxX+40), (maxY+40)));
             scroller.add(panel);
+            scroller.add(testlauf);
             scroller.setViewportView(panel);
         	this.panel.refresh();
         	this.update(getGraphics());

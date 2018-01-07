@@ -1,11 +1,10 @@
-package Testobjekte;
+package Release;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import Release.*;
 
 public class WFEPanel extends JPanel implements IWFESituationView {
 
@@ -25,6 +24,7 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     private boolean arcAddDestMode;
     private boolean newArcDestPlace;
     private boolean newArcDestTransition;
+    private boolean netValid;
     private String newSrcId;
     private String newDestId;
     private String newArcId;
@@ -82,29 +82,14 @@ public class WFEPanel extends JPanel implements IWFESituationView {
             public void mouseClicked(MouseEvent e) {
                 if(e.getButton() == MouseEvent.BUTTON1) {
                 	panelClicked(e);
-                    /*/JOptionPane.showMessageDialog(null, 
-                    "Pressed Linksklick auf X: " + e.getX() + " Y: " + e.getY(),
-                    "MouseButton", 
-                    JOptionPane.PLAIN_MESSAGE);/*/
                 }
-                /*/      if(e.getButton() == MouseEvent.BUTTON2) {
-                      JOptionPane.showMessageDialog(null, 
-                              "Mittelklick",
-                              "MouseButton", 
-                              JOptionPane.PLAIN_MESSAGE);
-                    }/*/
-                
             }
             @Override
             public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
-                
-            }
+             }
             
             @Override
             public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
-                
             }
             
  
@@ -124,15 +109,11 @@ public class WFEPanel extends JPanel implements IWFESituationView {
         this.addKeyListener(new KeyListener() {
         	
  			@Override
- 			public void keyTyped(KeyEvent e) {
- 				// TODO Auto-generated method stub
- 				 	
+ 			public void keyTyped(KeyEvent e) { 				 	
  			}
  			
  			@Override
  			public void keyReleased(KeyEvent e) {
- 				// TODO Auto-generated method stub
- 				
  			}
  			
  			@Override
@@ -228,6 +209,20 @@ public class WFEPanel extends JPanel implements IWFESituationView {
 	 */
 	public void setEndPlace(String endPlace) {
 		this.endPlace = endPlace;
+	}
+
+	/**
+	 * @return the netValid
+	 */
+	public boolean isNetValid() {
+		return netValid;
+	}
+
+	/**
+	 * @param netValid the netValid to set
+	 */
+	public void setNetValid(boolean netValid) {
+		this.netValid = netValid;
 	}
 
 	private void panelPressed(MouseEvent e, WFEModelNet petrinetz) {
@@ -444,8 +439,8 @@ public class WFEPanel extends JPanel implements IWFESituationView {
 
     private void deleteElements(KeyEvent e) {
     	if (e.getKeyCode()==127) {
-    		for (int p = 0; p<toModifyElements.size();p++) {
-    			IPetriNamedElements choosenElem = (IPetriNamedElements) toModifyElements.get(p);
+    		while (toModifyElements.size()>0) {	
+    			IPetriNamedElements choosenElem = (IPetriNamedElements) toModifyElements.get(0);
                 for (int l = 0; l< petrinetz.getListSize(); l++) {
                     if (petrinetz.petriElements.get(l) instanceof IPetriNamedElements) {
                         IPetriNamedElements currElem = (IPetriNamedElements) petrinetz.petriElements.get(l);
@@ -459,7 +454,7 @@ public class WFEPanel extends JPanel implements IWFESituationView {
                         		}
                         	}
                         	petrinetz.petriElements.remove(l);
-                        	toModifyElements.remove(p);
+                        	toModifyElements.remove(0);
                             refresh();
                         }
                     }
@@ -502,7 +497,10 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     						g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
     						g.setColor(Color.BLACK);
     						g.drawOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
-    						if (stelle.GetID().equals(startPlace)) {g.drawString("Marke: "+stelle.GetToken(), stelle.getPositionx()+elemsizefactor+15, stelle.getPositiony());}
+    						if (stelle.GetID().equals(startPlace)) {
+    							stelle.SetToken("1");
+    							g.drawString("Marke: "+stelle.GetToken(), stelle.getPositionx()+elemsizefactor+15, stelle.getPositiony());
+    							}
     	    				if (stelle.getName() != null) {
     	        				g.drawString(stelle.getName(), stelle.getPositionx(), stelle.getPositiony()+elemsizefactor+15);
     	    				}
@@ -522,7 +520,10 @@ public class WFEPanel extends JPanel implements IWFESituationView {
 					g.fillOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
 					g.setColor(Color.BLACK);
 					g.drawOval(stelle.getPositionx(), stelle.getPositiony(), elemsizefactor, elemsizefactor);
-					if (stelle.GetID().equals(startPlace)) {g.drawString("Marke: "+stelle.GetToken(), stelle.getPositionx()+elemsizefactor+15, stelle.getPositiony());}
+					if (stelle.GetID().equals(startPlace)) {
+						stelle.SetToken("1");
+						g.drawString("Marke: "+stelle.GetToken(), stelle.getPositionx()+elemsizefactor+15, stelle.getPositiony());
+						}
     				if (stelle.getName() != null) {
         				g.drawString(stelle.getName(), stelle.getPositionx(), stelle.getPositiony()+elemsizefactor+15);
     				}
@@ -623,7 +624,7 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     
     public void refresh() {
     	if (petrinetz.getListSize()>0) {
-    		Validator.isValidNet(petrinetz, this);
+    		setNetValid(Validator.isValidNet(petrinetz, this));
     	}
     	repaint();
     }

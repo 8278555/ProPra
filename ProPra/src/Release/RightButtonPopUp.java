@@ -1,8 +1,7 @@
-package Testobjekte;
+package Release;
 
 import java.awt.event.*;
 import javax.swing.*;
-import Release.*;
 
 public class RightButtonPopUp extends JPopupMenu {
 
@@ -61,8 +60,7 @@ public class RightButtonPopUp extends JPopupMenu {
 		jMenuChangePlaceMarking = new JMenuItem("Markierung ändern");
 		jMenuChangePlaceMarking.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+			public void actionPerformed(ActionEvent e) { 
 				for (int i = 0; i < petrinetz.getListSize();i++) {
 					if (petrinetz.petriElements.get(i) instanceof IPlace) {
 						IPlace stelle = (IPlace) petrinetz.petriElements.get(i);
@@ -155,13 +153,11 @@ public class RightButtonPopUp extends JPopupMenu {
 	}
 
 	public RightButtonPopUp() {
-		super();
-		// TODO Auto-generated constructor stub
+		super();		
 	}
 
 	
 	public RightButtonPopUp(String arg0) {
 		super(arg0);
-		// TODO Auto-generated constructor stub
 	}
 }

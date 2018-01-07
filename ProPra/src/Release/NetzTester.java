@@ -1,16 +1,10 @@
 /**
  * 
  */
-package Testobjekte;
+package Release;
 
 import java.util.ArrayList;
 
-import Release.*;
-
-/**
- * @author bibabuzzel
- *
- */
 public class NetzTester {
 	WFEModelNet petrinetz;
 	WFEPanel panel;
@@ -124,7 +118,6 @@ public class NetzTester {
 			}			
 		}
 		for (int r = 0; r < petrinetz.getListSize(); r++) {
-			System.out.println("SrcCand Anz :"+sourceCandidates.size());
 			if ((sourceCandidates.size()==1)&&((petrinetz.petriElements.get(r) instanceof IPlace)&&(petrinetz.petriElements.get(r).GetID().equals(sourceCandidates.get(0))))) {
 				correctStartPlace = true;
 				transitionAsStart = false;
@@ -174,7 +167,6 @@ public class NetzTester {
 			}			
 		}
 		for (int r = 0; r < petrinetz.getListSize(); r++) {
-			System.out.println("EndCand Anz :"+endCandidates.size());
 			if ((endCandidates.size()==1)&&((petrinetz.petriElements.get(r) instanceof IPlace)&&(petrinetz.petriElements.get(r).GetID().equals(endCandidates.get(0))))) {
 				correctEndPlace = true;
 				transitionAsEnd = false;
@@ -226,9 +218,11 @@ public class NetzTester {
 			panel.setInvalidReasonMessage(null);
 			panel.setStartPlace(sourceCandidates.get(0));
 			panel.setEndPlace(endCandidates.get(0));
+			validNet = true;
 		}
 		else {
 			panel.setInvalidReasonMessage(fehlermeldung);
+			validNet = false;
 		}
 	}
 
