@@ -59,7 +59,7 @@ public class Pfeildreieck {
 		double b = (double)y2-(a*(double)x2);
 		
 		if (Math.abs(x1-x2)<Math.abs(y1-y2)) {
-		    if (y1<y2) {
+		    if (y1<=y2) {
 		        doubleY3 = (double)y2-factor/2;
 		        doubleX3 = (doubleY3-b)/a;
 		    }
@@ -69,7 +69,7 @@ public class Pfeildreieck {
 		    }
 		}
 		else if (Math.abs(x1-x2)>=Math.abs(y1-y2)) {
-		    if (x1<x2) {
+		    if (x1<=x2) {
 		        doubleX3 = (double)x2-factor/2;
 		        doubleY3 = a*doubleX3 + b;
 		    }
@@ -78,7 +78,6 @@ public class Pfeildreieck {
 		        doubleY3 = a*doubleX3 + b;
 		    }
 		}
-		
 			if (x1<x2) {
 				//x2=x2-factor/2;
 				if (y1<y2) {
@@ -140,6 +139,7 @@ public class Pfeildreieck {
 			}
 			else if (x1==x2) {
 				if (y1<y2) {
+					doubleX3 = (double)x2;
 					doubleX4 = doubleX3;
 					doubleY4 = doubleY3 - factor;
 					doubleX5 = doubleX4 + factor/2;
@@ -148,6 +148,7 @@ public class Pfeildreieck {
 					doubleY6 = doubleY4;
 				}
 				else if (y1>y2) {
+					doubleX3 = (double)x2;
 					doubleX4 = doubleX3;
 					doubleY4 = doubleY3 + factor;
 					doubleX5 = doubleX4 + factor/2;
@@ -157,6 +158,7 @@ public class Pfeildreieck {
 
 				}
 				else if (y1==y2) {
+					doubleX3 = (double)x2;
 					doubleX4 = doubleX3;
 					doubleY4 = doubleY3;
 					doubleX5 = doubleX4;

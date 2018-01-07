@@ -42,7 +42,7 @@ public class WFEMainWindow extends JFrame {
             this.validate();
     	};
     	panel = new WFEPanel(petrinetz);
-    	testlauf = new WFETestrunPanel(petrinetz);
+    	testlauf = new WFETestrunPanel();
     	panel.startnew();    	
 		panel.setPreferredSize(new Dimension (600, 500));
 		        scroller.add(panel);
@@ -57,7 +57,7 @@ public class WFEMainWindow extends JFrame {
 		setPreferredSize(new Dimension(700, 500));
 		this.setTitle(title);
 		this.panel = editpanel;
-		testlauf = new WFETestrunPanel(petrinetz);
+		testlauf = new WFETestrunPanel();
 		initComponents();
 		panel.setPreferredSize(new Dimension (500, 500));
         scroller.add(panel);
@@ -230,15 +230,19 @@ public class WFEMainWindow extends JFrame {
 					if (panel.isNetValid()==true) {
 						testActive = true;
 						jMenuItemNetTestRun.setText("Bearbeitung fortsetzen");
+						jMenuFile.setEnabled(false);
+						jMenuItemNetSettings.setEnabled(false);
+						jMenuNetNew.setEnabled(false);
 						if (testlauf != null) {
 							remove(testlauf);
 						}
 						testlauf = new WFETestrunPanel(petrinetz);
 						testlauf.setStartPlace(panel.getStartPlace());
 						testlauf.setEndPlace(panel.getEndPlace());
+						testlauf.setElemsizefactor(panel.getElemsizefactor());
 						testlauf.refresh();
 						scroller.setViewportView(testlauf);
-
+						testlauf.requestFocus();
 					}
 					else {
 						JOptionPane.showMessageDialog(rootPane, "Kein gültiges Netz, Testlauf nicht möglich");
@@ -247,6 +251,10 @@ public class WFEMainWindow extends JFrame {
 				else {
 					testActive = false;
 					scroller.setViewportView(panel);
+					panel.requestFocus();
+					jMenuFile.setEnabled(true);
+					jMenuNetNew.setEnabled(true);
+					jMenuItemNetSettings.setEnabled(true);
 					jMenuItemNetTestRun.setText("Testlauf starten");
 				}				
 			}
@@ -273,10 +281,10 @@ public class WFEMainWindow extends JFrame {
         jMenuFile.add(jMenuItemFileSave);
         jMenuFile.add(jMenuItemFileSaveAs);
         jMenuFile.add(jMenuItemFileClose);
-
-        jMenuNetNew.add(jMenuItemNewArc);
-        jMenuNetNew.add(jMenuItemNewTransition);
+        
         jMenuNetNew.add(jMenuItemNewPlace);
+        jMenuNetNew.add(jMenuItemNewTransition);
+        jMenuNetNew.add(jMenuItemNewArc);
 
         jMenuNet.add(jMenuNetNew);
         jMenuNet.add(jMenuItemNetTestRun);
@@ -308,7 +316,7 @@ public class WFEMainWindow extends JFrame {
             this.validate();
     	};
     	panel = new WFEPanel(petrinetz);
-    	testlauf = new WFETestrunPanel(petrinetz);
+    	testlauf = new WFETestrunPanel();
     	panel.startnew();    	
 		panel.setPreferredSize(new Dimension (600, 500));
         scroller.add(panel);
@@ -343,7 +351,7 @@ public class WFEMainWindow extends JFrame {
             pnmlParser.initParser();
             pnmlParser.parse();
             panel = new WFEPanel(petrinetz);
-            testlauf = new WFETestrunPanel(petrinetz);
+            testlauf = new WFETestrunPanel();
         	int maxX = 0;
         	int maxY = 0;
         	for (int k = 0; k< petrinetz.getListSize(); k++) {

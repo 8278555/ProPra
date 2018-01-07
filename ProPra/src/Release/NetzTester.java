@@ -19,8 +19,7 @@ public class NetzTester {
 	String fehlermeldung;
 	private ArrayList<IPetriElements> lonelyElements;
 	private ArrayList<String> sourceCandidates;
-	private ArrayList<String> endCandidates;
-	
+	private ArrayList<String> endCandidates;	
 	
 	public NetzTester() {
 		

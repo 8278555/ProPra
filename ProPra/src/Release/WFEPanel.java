@@ -65,11 +65,7 @@ public class WFEPanel extends JPanel implements IWFESituationView {
             	}
             	if(e.getButton() == MouseEvent.BUTTON3) {
             		panelRightButtonMenu(e, petrinetz);
-                    //System.out.println(menu.getNewPlace());
-                	/*JOptionPane.showMessageDialog(null, 
-                              "Rechtsklick",
-                              "MouseButton", 
-                              JOptionPane.PLAIN_MESSAGE);*/
+
                 }
             }
 
@@ -118,6 +114,7 @@ public class WFEPanel extends JPanel implements IWFESituationView {
  			
  			@Override
  			public void keyPressed(KeyEvent e) {
+ 				System.out.println(e.getKeyCode());
  				deleteElements(e);
  			}
  		});
@@ -283,9 +280,7 @@ public class WFEPanel extends JPanel implements IWFESituationView {
                         	verschiebemodus = true;
                         }
                     }
-                    else if (petrinetz.petriElements.get(k) instanceof IArc) {
-                    	//IArc currElem = (IArc) petrinetz.petriElements.get(k);
-                    }
+
                 }
 			}
 			else if (xstart != e.getX() || ystart != e.getY() || singleelemclicked == false){
@@ -511,7 +506,6 @@ public class WFEPanel extends JPanel implements IWFESituationView {
     	    				if (stelle.getName() != null) {
     	        				g.drawString(stelle.getName(), stelle.getPositionx(), stelle.getPositiony()+elemsizefactor+15);
     	    				}
-    						//break;
     					}
     				}
     			}

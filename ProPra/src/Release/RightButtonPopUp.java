@@ -97,11 +97,11 @@ public class RightButtonPopUp extends JPopupMenu {
 			public void actionPerformed(ActionEvent e) {
 				for (int i = 0; i < petrinetz.getListSize();i++) {
 					if (petrinetz.petriElements.get(i) instanceof ITransition) {
-						ITransition stelle = (ITransition) petrinetz.petriElements.get(i);
-						if (evt.getX() >= stelle.getPositionx() && evt.getX() <= (stelle.getPositionx()+panel.getElemsizefactor())&& evt.getY() >= stelle.getPositiony() && evt.getY() <= (stelle.getPositiony()+panel.getElemsizefactor())) {
+						ITransition transition = (ITransition) petrinetz.petriElements.get(i);
+						if (evt.getX() >= transition.getPositionx() && evt.getX() <= (transition.getPositionx()+panel.getElemsizefactor())&& evt.getY() >= transition.getPositiony() && evt.getY() <= (transition.getPositiony()+panel.getElemsizefactor())) {
 							String newname = JOptionPane.showInputDialog("Bitte den neuen Namen der Transition angeben", "z.B. Transition 1"); 
 							if (newname!=null) {
-								stelle.setName(newname);
+								transition.setName(newname);
 								panel.refresh();
 							};
 							
